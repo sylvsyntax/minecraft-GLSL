@@ -1,0 +1,19 @@
+# We only want to share 
+# .hpp, .cpp, .vert, .frag, and .h files ATM 
+# as we are working in different IDE's with 
+# different project settings
+
+# everything
+**
+
+!*/
+!.gitignore
+!.gitattributes
+!README.md
+
+!*.c
+!*.cpp
+!*.hpp
+!*.h
+!*.vert
+!*.frag
