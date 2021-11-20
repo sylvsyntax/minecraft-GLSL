@@ -10,6 +10,7 @@
 
 
 const int WIDTH = 1280, HEIGHT = 720;
+const string PROJECT_FILES_ROOT = "../Project Files/";
 
 GLfloat vertices[] =
 {
@@ -71,7 +72,7 @@ int main()
 	// Initialize Shaders
 
 	// Generates Shader object using shaders default.vert and default.frag
-	Shader shaderProgram("../Project Files/Shaders/default.vert", "../Project Files/Shaders/default.frag");
+	Shader shaderProgram(PROJECT_FILES_ROOT + "Shaders/default.vert", PROJECT_FILES_ROOT + "Shaders/default.frag");
 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
