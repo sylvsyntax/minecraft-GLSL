@@ -1,5 +1,5 @@
-#ifndef shaderClass_hpp
-#define shaderClass_hpp
+#ifndef SHADER_CLASS_H
+#define SHADER_CLASS_H
 
 #include <glad/glad.h>
 #include <string>
@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cerrno>
 using namespace std;
+
 string get_file_contents(const char* file_name);
 
 class Shader
@@ -20,4 +21,4 @@ public:
     void Delete();
 };
 
-#endif /* shaderClass_hpp */
+#endif /* SHADER_CLASS_H */
