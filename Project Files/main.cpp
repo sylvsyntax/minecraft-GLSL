@@ -135,8 +135,6 @@ int main()
 
 	// Delete window before ending the program
 	glfwDestroyWindow(window);
-
-	// Terminate GLFW before ending the program
-	glfwTerminate();
-	return 0;
+    glfwTerminate();
+    return 0;
 }
