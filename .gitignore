@@ -6,7 +6,8 @@
 # everything
 **
 
-!*/
+!Project Files/
+!.git/
 !.gitignore
 !.gitattributes
 !README.md
