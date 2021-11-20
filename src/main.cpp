@@ -73,7 +73,7 @@ int main()
 	*****************************************/
 
 	// Generates Shader object using shaders default.vert and default.frag
-	Shader shaderProgram("default.vert", "default.frag");
+	Shader shaderProgram("src/default.vert", "src/default.frag");
 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
@@ -104,7 +104,7 @@ int main()
 
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("Textures/terrain.png", &widthImg, &heightImg, &numColCh, 0);
+	unsigned char* bytes = stbi_load("src/Textures/terrain.png", &widthImg, &heightImg, &numColCh, 0);
 
 	GLuint texture;
 	glGenTextures(1, &texture);
