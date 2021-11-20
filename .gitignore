@@ -6,8 +6,7 @@
 # everything
 **
 
-!Project Files/
-!*/Textures/
+!Textures/
 !.git/
 !.gitignore
 !.gitattributes
