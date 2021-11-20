@@ -9,8 +9,7 @@
 #include "EBO.h"
 
 
-const int WIDTH = 1280, HEIGHT = 720;
-const string PROJECT_FILES_ROOT = "../Project Files/";
+const GLint WIDTH = 1280, HEIGHT = 720;
 
 GLfloat vertices[] =
 {//		 COORDINATES	 /		 COLORS		  //
@@ -41,6 +40,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Learn OpenGL", NULL, NULL);
@@ -73,7 +73,7 @@ int main()
 	*****************************************/
 
 	// Generates Shader object using shaders default.vert and default.frag
-	Shader shaderProgram(PROJECT_FILES_ROOT + "Shaders/default.vert", PROJECT_FILES_ROOT + "Shaders/default.frag");
+	Shader shaderProgram("default.vert", "default.frag");
 
 	// Generates Vertex Array Object and binds it
 	VAO VAO1;
@@ -104,7 +104,7 @@ int main()
 
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("../Project Files/Textures/terrain.png", &widthImg, &heightImg, &numColCh, 0);
+	unsigned char* bytes = stbi_load("Textures/terrain.png", &widthImg, &heightImg, &numColCh, 0);
 
 	GLuint texture;
 	glGenTextures(1, &texture);
