@@ -15,7 +15,6 @@
 
 const GLint WIDTH = 1280, HEIGHT = 720;
 
-
 GLfloat vertices[] =
 {//		 COORDINATES	 /		 COLORS		  /  TexCoord  //
 	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
