@@ -31,11 +31,9 @@ jobs:
           git checkout visual-studio -- src
           
       - name: Set Git Config
-        env:
-          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
         run: |
           cd $GITHUB_WORKSPACE
-          git config user.email $GIT_EMAIL
+          git config user.email 29378966+TheAvonian@users.noreply.github.com
           git config user.name TheAvonian
         
       - name: Commit changes to xcode 
