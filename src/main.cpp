@@ -2,7 +2,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#include "Texture.h"
 #include "shaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
@@ -12,7 +16,7 @@
 const GLint WIDTH = 1280, HEIGHT = 720;
 
 GLfloat vertices[] =
-{//		 COORDINATES	 /		 COLORS		  //
+{//		 COORDINATES	 /		 COLORS		  /  TexCoord  //
 	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // Lower left corner
 	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f, // Upper left corner
 	 0.5f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	1.0f, 1.0f, // Upper right corner
@@ -43,7 +47,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Learn OpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Minecraft??", NULL, NULL);
 
 	if (window == NULL)
 	{
@@ -102,28 +106,11 @@ int main()
 
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
-	int widthImg, heightImg, numColCh;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("src/Textures/terrain.png", &widthImg, &heightImg, &numColCh, 0);
+	// Texture
 
-	GLuint texture;
-	glGenTextures(1, &texture);
+	Texture terrain("src/Textures/terrain.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 
-	glActiveTexture(GL_TEXTURE0);
-
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(bytes);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	terrain.texUnit(shaderProgram, "tex0", 0);
 
 	GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
 
@@ -140,7 +127,7 @@ int main()
 		// Tell Openwhich Shader Program we want to useGL 
 		shaderProgram.Activate();
 		glUniform1f(uniID, 0.5f);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		terrain.Bind();
 		// Bind the VAO so OpenGL knows to use it
 		VAO1.Bind();
 
@@ -158,7 +145,7 @@ int main()
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
-	glDeleteTextures(1, &texture);
+	terrain.Delete();
 	shaderProgram.Delete();
 
 	// Delete window before ending the program
