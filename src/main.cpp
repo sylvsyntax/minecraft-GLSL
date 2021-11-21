@@ -9,7 +9,7 @@
 #include "EBO.h"
 
 
-const GLint WIDTH = 1600, HEIGHT = 900;
+const GLint WIDTH = 1280, HEIGHT = 720;
 
 GLfloat vertices[] =
 {//		 COORDINATES	 /		 COLORS		  //
