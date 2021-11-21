@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: mirror-files-from-vs
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ visual-studio ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Checkout files
+        run: |
+          cd $GITHUB_WORKSPACE
+          git checkout xcode
+          git checkout visual-studio -- src
+          
+      - name: Set Git Config
+        env:
+          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+        run: |
+          cd $GITHUB_WORKSPACE
+          git config user.email $GIT_EMAIL
+          git config user.name TheAvonian
+        
+      - name: Commit changes to xcode 
+        run: |
+          cd $GITHUB_WORKSPACE
+          git commit -m "Accepting new changes from visual studio"
+        
+      - name: Push to xcode branch
+        run: |
+          cd $GITHUB_WORKSPACE
+          git push
+          
+      - name: Checkout files into main and push
+        run: |
+          cd $GITHUB_WORKSPACE
+          git checkout main
+          git checkout visual-studio -- src
+          git commit -m "Accepting new changes from visual studio"
+          git push
