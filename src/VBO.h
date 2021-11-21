@@ -1,6 +1,9 @@
 #ifndef VBO_CLASS_H
 #define VBO_CLASS_H
 
+// Most of this class was provided from an OpenGL tutorial
+// https://youtu.be/45MIykWJ-C4
+
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <vector>

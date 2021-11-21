@@ -1,7 +1,7 @@
 #ifndef MESH_CLASS_H
 #define MESH_CLASS_H
 
-// Starting of this class was provided from an OpenGL tutorial
+// Most of this class was provided from an OpenGL tutorial
 // https://youtu.be/45MIykWJ-C4?t=5117
 
 #include <string>

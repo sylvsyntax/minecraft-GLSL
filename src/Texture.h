@@ -1,6 +1,9 @@
 #ifndef TEXTURE_CLASS_H
 #define TEXTURE_CLASS_H
 
+// Most of this class was provided from an OpenGL tutorial
+// https://youtu.be/45MIykWJ-C4
+
 #include <glad/glad.h>
 #include <stb/stb_image.h>
 

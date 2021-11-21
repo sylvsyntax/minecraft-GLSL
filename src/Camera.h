@@ -1,6 +1,9 @@
 #ifndef CAMERA_CLASS_H
 #define CAMERA_CLASS_H
 
+// Some of this class was provided from an OpenGL tutorial
+// https://youtu.be/45MIykWJ-C4
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -21,6 +24,7 @@ public:
 	glm::mat4 cameraMatrix = glm::mat4(1.0f);
 
 	bool firstClick = true;
+	bool onGround = false;
 
 	int width;
 	int height;
