@@ -5,11 +5,12 @@
 
 # everything
 **
-
 !Textures/
+!src/Textures/
 !.git/
 !.gitignore
 !.gitattributes
+!src/
 !README.md
 
 !*.c
