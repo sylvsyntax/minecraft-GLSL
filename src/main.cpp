@@ -15,31 +15,19 @@
 
 
 
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <stb/stb_image.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include "Texture.h"
-#include "shaderClass.h"
-#include "VAO.h"
-#include "VBO.h"
-#include "EBO.h"
-#include "Camera.h"
+#include "Mesh.h"
 
 
 const GLint WIDTH = 1280, HEIGHT = 720;
 
-GLfloat vertices[] =
+Vertex vertices[] =
 {//		 COORDINATES	 /		 COLORS		     /   TexCoord    /       NORMALS       //
-	-1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-	-1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-	 1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-	 1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+	Vertex{glm::vec3(-1.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)},
 };
+
 
 // Indices for vertices order
 GLuint indices[] =
@@ -48,16 +36,16 @@ GLuint indices[] =
 	 0, 2, 3
 };
 
-GLfloat lightVertices[] =
+Vertex lightVertices[] =
 { //     COORDINATES       //
-	-0.1f, -0.1f,  0.1f,
-	-0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f,  0.1f,
-	-0.1f,  0.1f,  0.1f,
-	-0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f,  0.1f,
+	Vertex{glm::vec3(-0.1f, -0.1f, 0.1f)},
+	Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f, 0.1f)},
+	Vertex{glm::vec3(-0.1f, 0.1f, 0.1f)},
+	Vertex{glm::vec3(-0.1f, 0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, 0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, 0.1f, 0.1f)},
 };
 
 GLuint lightIndices[] =
@@ -107,6 +95,10 @@ int main()
 
 	glViewport(0, 0, WIDTH, HEIGHT);
 
+	Texture textures[]
+	{
+		Texture("src/Textures/terrain.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+	};
 
 	/*****************************************
 	* 
@@ -124,25 +116,11 @@ int main()
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("src/default.vert", "src/default.frag");
 
-	// Generates Vertex Array Object and binds it
-	VAO VAO1;
-	VAO1.Bind();
+	vector<Vertex> verts(vertices, vertices + sizeof(vertices) / sizeof(Vertex));
+	vector<GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
+	vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
 
-	// Generates Vertex Buffer Object and lnks it to vertices
-	VBO VBO1(vertices, sizeof(vertices));
-	// Generates Element Buffer Object and links it to indices
-	EBO EBO1(indices, sizeof(indices));
-
-	// Links VBO to VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
-
-	// Unbind all to prevent accidentally modifying them
-	VAO1.Unbind();
-	VBO1.Unbind();
-	EBO1.Unbind();
+	Mesh floor(verts, ind, tex);
 
 	/*****************************************
 	* 
@@ -158,17 +136,10 @@ int main()
 	
 	Shader lightShader("src/light.vert", "src/light.frag");
 
-	VAO lightVAO;
-	lightVAO.Bind();
+	vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
+	vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
+	Mesh light(lightVerts, lightInd, tex);
 
-	VBO lightVBO(lightVertices, sizeof(lightVertices));
-	EBO lightEBO(lightIndices, sizeof(lightIndices));
-
-	lightVAO.LinkAttrib(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-
-	lightVAO.Unbind();
-	lightVBO.Unbind();
-	lightEBO.Unbind();
 
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -197,12 +168,6 @@ int main()
 	*
 	**/
 
-	// Texture
-
-	Texture terrain("src/Textures/terrain.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-
-	terrain.texUnit(shaderProgram, "tex0", 0);
-
 	// for textures not to be drawn wrong 
 	glEnable(GL_DEPTH_TEST);
 
@@ -221,26 +186,10 @@ int main()
 
 
 		camera.Inputs(window);
-		camera.updateMatrix(45.0f, 0.1f, 100.0f);
+		camera.updateMatrix(65.0f, 0.1f, 100.0f);
 
-		// Tell Openwhich Shader Program we want to useGL 
-		shaderProgram.Activate();
-		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-		camera.Matrix(shaderProgram, "camMatrix");
-
-
-		// binds texture so we can see it
-		terrain.Bind();
-		// Bind the VAO so OpenGL knows to use it
-		VAO1.Bind();
-
-		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
-
-		lightShader.Activate();
-		camera.Matrix(lightShader, "camMatrix");
-		lightVAO.Bind();
-		glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		floor.Draw(shaderProgram, camera);
+		light.Draw(lightShader, camera);
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
@@ -250,14 +199,7 @@ int main()
 	}
 
 	// Delete all the objects we've created
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
-	terrain.Delete();
 	shaderProgram.Delete();
-	lightVAO.Delete();
-	lightVBO.Delete();
-	lightEBO.Delete();
 	lightShader.Delete();
 	// Delete window before ending the program
 	glfwDestroyWindow(window);

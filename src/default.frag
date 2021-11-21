@@ -1,14 +1,16 @@
 #version 330 core
 out vec4 FragColor;
 
+in vec3 crntPos;
+
+in vec3 Normal;
+
 in vec3 color;
 
 in vec2 texCoord;
 
-in vec3 Normal;
-in vec3 crntPos;
 
-uniform sampler2D tex0;
+uniform sampler2D diffuse0;
 
 uniform vec4 lightColor;
 
@@ -40,7 +42,7 @@ vec4 pointLight()
 	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
 	float specular = specAmount * specularLight;
 
-	return texture(tex0, texCoord) * lightColor * (diffuse * inten + ambient + specular * inten);
+	return texture(diffuse0, texCoord) * lightColor * (diffuse * inten + ambient + specular * inten);
 }
 
 vec4 direcLight()
@@ -60,7 +62,7 @@ vec4 direcLight()
 	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
 	float specular = specAmount * specularLight;
 
-	return texture(tex0, texCoord) * lightColor * (diffuse + ambient + specular);
+	return texture(diffuse0, texCoord) * lightColor * (diffuse + ambient + specular);
 
 }
 
