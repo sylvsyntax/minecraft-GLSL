@@ -35,37 +35,17 @@ const GLint WIDTH = 1280, HEIGHT = 720;
 
 GLfloat vertices[] =
 {//		 COORDINATES	 /		 COLORS		     /   TexCoord    /       NORMALS       //
-	-0.5f, 0.0f,  0.5f,		0.83f, 0.70f, 0.44f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f, // Bottom side
-	-0.5f, 0.0f, -0.5f,		0.83f, 0.70f, 0.44f,	0.0f, 5.0f,		0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f, -0.5f,		0.83f, 0.70f, 0.44f,	5.0f, 5.0f,		0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f,  0.5f,		0.83f, 0.70f, 0.44f,	5.0f, 0.0f,		0.0f, -1.0f, 0.0f, // Bottom side
-
-	-0.5f, 0.0f,  0.5f,		0.83f, 0.70f, 0.44f,	0.0f, 0.0f,		-0.8f, 0.5f,  0.0f, // Left side
-	-0.5f, 0.0f, -0.5f,		0.83f, 0.70f, 0.44f,	5.0f, 0.0f,		-0.8f, 0.5f,  0.0f, // Left side
-	 0.0f, 0.8f,  0.0f,		0.92f, 0.86f, 0.76f,	2.5f, 5.0f,		-0.8f, 0.5f,  0.0f, // Left side
-
-	-0.5f, 0.0f, -0.5f,		0.83f, 0.70f, 0.44f,	5.0f, 0.0f,		0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.5f, 0.0f, -0.5f,		0.83f, 0.70f, 0.44f,	0.0f, 0.0f,		0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.0f, 0.8f,  0.0f,		0.92f, 0.86f, 0.76f,	2.5f, 5.0f,		0.0f, 0.5f, -0.8f, // Non-facing side
-
-	 0.5f, 0.0f, -0.5f,		0.83f, 0.70f, 0.44f,	0.0f, 0.0f,		0.8f, 0.5f,  0.0f, // Right side
-	 0.5f, 0.0f,  0.5f,		0.83f, 0.70f, 0.44f,	5.0f, 0.0f,		0.8f, 0.5f,  0.0f, // Right side
-	 0.0f, 0.8f,  0.0f,		0.92f, 0.86f, 0.76f,	2.5f, 5.0f,		0.8f, 0.5f,  0.0f, // Right side
-
-	 0.5f, 0.0f,  0.5f,		0.83f, 0.70f, 0.44f,	5.0f, 0.0f,		0.0f, 0.5f,  0.8f, // Facing side
-	-0.5f, 0.0f,  0.5f,		0.83f, 0.70f, 0.44f,	0.0f, 0.0f,		0.0f, 0.5f,  0.8f, // Facing side
-	 0.0f, 0.8f,  0.0f,		0.92f, 0.86f, 0.76f,	2.5f, 5.0f,		0.0f, 0.5f,  0.8f, // Facing side
+	-1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+	-1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	 1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	 1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f,
 };
 
 // Indices for vertices order
 GLuint indices[] =
 {
-	 0,  1,  2, // Bottom side
-	 0,  2,  3, // Bottom side
-	 4,  6,  5, // Left side
-	 7,  9,  8, // Non-facing side
-	10, 12, 11, // Right side
-	13, 15, 14, // Facing side
+	 0, 1, 2,
+	 0, 2, 3
 };
 
 GLfloat lightVertices[] =
@@ -245,6 +225,7 @@ int main()
 
 		// Tell Openwhich Shader Program we want to useGL 
 		shaderProgram.Activate();
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 		camera.Matrix(shaderProgram, "camMatrix");
 
 
@@ -274,7 +255,10 @@ int main()
 	EBO1.Delete();
 	terrain.Delete();
 	shaderProgram.Delete();
-
+	lightVAO.Delete();
+	lightVBO.Delete();
+	lightEBO.Delete();
+	lightShader.Delete();
 	// Delete window before ending the program
 	glfwDestroyWindow(window);
     glfwTerminate();
