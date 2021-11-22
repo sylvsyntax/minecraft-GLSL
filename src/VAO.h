@@ -4,7 +4,6 @@
 // Most of this class was provided from an OpenGL tutorial
 // https://youtu.be/45MIykWJ-C4
 
-#include <glad/glad.h>
 #include "VBO.h"
 
 class VAO

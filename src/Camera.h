@@ -4,15 +4,16 @@
 // Some of this class was provided from an OpenGL tutorial
 // https://youtu.be/45MIykWJ-C4
 
-#include <glad/glad.h>
+
+#include "shaderClass.h"
+
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "shaderClass.h"
 
 class Camera
 {
