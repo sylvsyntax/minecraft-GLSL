@@ -14,7 +14,7 @@
 // https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
 
 
-
+#include <Filesystem>
 #include "Mesh.h"
 
 
@@ -64,6 +64,8 @@ GLuint lightIndices[] =
 	4, 6, 7,
 };
 
+
+
 int main()
 {
 	/**
@@ -71,7 +73,7 @@ int main()
 	*   Initialize GLFW
 	* 
 	*****************************************/
-
+    
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
