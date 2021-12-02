@@ -14,10 +14,11 @@
 class World
 {
 public:
-    
+    World();
     std::vector<Mesh> sceneMeshes;
-    Shader shaderProgram("src/default.vert", "src/default.frag");
-    void Define();
+    std::vector<Mesh> sceneLights;
+    Shader shaderProgram;
+    Shader lightShader;
 };
 
 #endif /* World_hpp */

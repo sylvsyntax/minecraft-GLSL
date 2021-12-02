@@ -29,6 +29,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
     const char* fragmentSource = fragmentCode.c_str();
 
     // Create Vertex Shader Object and get its reference
+    
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     // Attach Vertex Shader source to the Vertex Shader Object

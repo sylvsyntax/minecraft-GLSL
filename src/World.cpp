@@ -7,7 +7,7 @@
 
 #include "World.h"
 
-void World::Define(){
+World::World() : shaderProgram("src/default.vert","src/default.frag"), lightShader("src/light.vert", "src/light.frag") {
     //Texture map plane
     Vertex vertices[] =
     {//         COORDINATES     /         COLORS             /   TexCoord    /       NORMALS       //
@@ -69,12 +69,11 @@ void World::Define(){
     
     
     //Begins the shaders to the lighting mesh
-    Shader lightShader("src/light.vert", "src/light.frag");
     //Builds the mesh that controls the light cube
     vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
     vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
     Mesh light(lightVerts, lightInd, tex);
-    sceneMeshes.push_back(light);
+    sceneLights.push_back(light);
 
     //Sets the color of the light
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -94,4 +93,3 @@ void World::Define(){
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 }
-

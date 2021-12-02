@@ -16,13 +16,13 @@
 
 #include <Filesystem>
 #include "Mesh.h"
+#include "World.h"
 
 
 const GLint WIDTH = 1280, HEIGHT = 720;
 
 int main()
 {
-    World minecraft;
     glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -46,7 +46,6 @@ int main()
 
     glViewport(0, 0, WIDTH, HEIGHT);
     
-    minecraft.Define();
 
     // for textures not to be drawn wrong
     // Enables the depth test so faces drawn behind objects won't overlap.
@@ -55,6 +54,7 @@ int main()
     Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
 
 
+    World minecraft;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -66,12 +66,15 @@ int main()
 
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
-        for (auto & i : sceneMeshes)
+        for (auto & i : minecraft.sceneMeshes)
         {
-            i.Draw(shaderProgram, camera);
+            i.Draw(minecraft.shaderProgram, camera);
+        }
+        for (auto & i : minecraft.sceneLights)
+        {
+            i.Draw(minecraft.lightShader, camera);
         }
         
-		//light.Draw(lightShader, camera);
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
@@ -81,8 +84,8 @@ int main()
 	}
 
 	// Delete all the objects we've created
-	shaderProgram.Delete();
-	//lightShader.Delete();
+	minecraft.shaderProgram.Delete();
+	minecraft.lightShader.Delete();
 	// Delete window before ending the program
 	glfwDestroyWindow(window);
     glfwTerminate();
