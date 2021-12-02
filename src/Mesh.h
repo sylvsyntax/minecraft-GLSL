@@ -10,6 +10,7 @@
 #include "EBO.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "World.h"
 
 class Mesh
 {

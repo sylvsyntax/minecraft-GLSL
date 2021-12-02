@@ -1,21 +1,23 @@
+//
+//  World.hpp
+//  Minecraft-GLSL
+//
+//  Created by Sylvia Sharpe on 12/2/21.
+//
+
 #ifndef WORLD_CLASS_H
 #define WORLD_CLASS_H
 
-#include "Chunk.h"
+#include <stdio.h>
+#include "Mesh.h"
 
 class World
 {
 public:
-	const GLuint TOTAL_CHUNKS = 2;
-
-	vector<Block> allBlockTypes;
-	vector<Texture> allTextures;
-
-	vector<Chunk> loadedChunks;
-	vector<Chunk> unloadedChunks;
-	World(string textureFolder);
-
-	void generateWorldSpawn();
+    
+    std::vector<Mesh> sceneMeshes;
+    Shader shaderProgram("src/default.vert", "src/default.frag");
+    void Define();
 };
 
-#endif
+#endif /* World_hpp */
