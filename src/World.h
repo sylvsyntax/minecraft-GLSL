@@ -8,7 +8,6 @@
 #ifndef WORLD_CLASS_H
 #define WORLD_CLASS_H
 
-#include <stdio.h>
 #include "Mesh.h"
 
 class World

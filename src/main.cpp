@@ -52,9 +52,10 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
-
+    
 
     World minecraft;
+    
 
 	while (!glfwWindowShouldClose(window))
 	{
