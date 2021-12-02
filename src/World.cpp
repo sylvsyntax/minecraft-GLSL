@@ -102,6 +102,41 @@ World::World() : shaderProgram("src/default.vert","src/default.frag"), lightShad
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     
-    Cube newBlock;
-    sceneMeshes.push_back(newBlock.mesh);
+    
+    
+    //This creates the light cube
+    LightingCube ls(glm::vec3(-0.4f, 0.0f, 0.3f));
+    sceneLights.push_back(ls.mesh);
+    
+    
+    glm::vec3 position = glm::vec3(0.3f, 0.3f, 0.1f);               //Assigns the position
+    Cube newBlock(position);                                        //Makes the block in the position
+    newBlock.LightSources.push_back(ls);                            //Pushes it to the block shader
+    sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
+    
+    
+    
+    
+    
+    
+    // Don't do this... this is broken after the normals were added
+    // But if you do end up enabling this... I'm sorry...
+    
+    
+    //
+    // Also by making a seperate vector2 or vec3 in the cubes, we can probably assign
+    // Textures that way...
+    //
+    /*
+    //This creates the 10x10x10 chunk
+    for (int i = 0; i < 10; i++){
+        for (int f = 0; f < 10; f++){
+            for (int v = 0; v < 10; v++){
+                glm::vec3 position = glm::vec3(0.1f * v, 0.1f * f, 0.1f * i);   //Assigns the position
+                Cube newBlock(position);                                        //Makes the block in the position
+                newBlock.LightSources.push_back(ls);                            //Pushes it to the block shader
+                sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
+            }
+        }
+    }*/
 }
