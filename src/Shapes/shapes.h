@@ -177,6 +177,4 @@ public:
 };
 
 
-void makeBox();
-
 #endif

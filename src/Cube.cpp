@@ -6,9 +6,6 @@
 //
 
 #include "Cube.h"
-#include "Shapes/shapes.h"
-const int numberOfVertices = 6 * 6;
-const int numberOfIndices = numberOfVertices * (3/2);
 
 Vertex cubeVertices[] =
 {          //         COORDINATES       //         NORMALS           //           COLOR          //       TEXCOORD       //
@@ -38,9 +35,6 @@ GLuint cubeIndices[] =
     4, 6, 7,
 };
 
-Vertex convertPtToVert(vec3 point){
-    return Vertex{glm::vec3(point.getx(), point.gety(), point.getz()), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0, 0)};
-}
 
 void resetVertices(){
     Vertex defaultCubeVertices[] =
@@ -55,7 +49,7 @@ void resetVertices(){
         Vertex{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1, 0)},
     };
     
-    for(int i = 0; i < numberOfVertices; i++){
+    for(int i = 0; i < 8; i++){
         cubeVertices[i] = defaultCubeVertices[i];
     }
     
@@ -88,9 +82,23 @@ Cube::Cube() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.fra
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 //Because we don't have enough vertices we cant build what we need to in order to properly assign the normals...
 Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"){
 
+    
+    
     //This is our translation (please fix)
     for (int i = 0; i < 8; i++){
         cubeVertices[i].position.x += newPosition.x;
@@ -125,7 +133,7 @@ Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","sr
         lightModel = glm::translate(lightModel, lightPos);
             
         glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-        glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+        glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), newPosition.x, newPosition.y, newPosition.z);
     }
     resetVertices();
 }
@@ -137,7 +145,21 @@ Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","sr
 
 
 LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
-
+    
+    lightPos.x += newPosition.x;
+    lightPos.y += newPosition.y;
+    lightPos.z += newPosition.z;
+    
+    for (int i = 0; i < 8; i++){
+        cubeVertices[i].position.x += newPosition.x;
+        cubeVertices[i].position.y += newPosition.y;
+        cubeVertices[i].position.z += newPosition.z;
+    }
+    
+    lightPos.x = cubeVertices[0].position.x;
+    lightPos.y = cubeVertices[0].position.y;
+    lightPos.z = cubeVertices[0].position.z;
+    
     
     Texture textures[]
     {
@@ -149,7 +171,6 @@ LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/lig
     vector<GLuint> lightInd(cubeIndices, cubeIndices + sizeof(cubeIndices) / sizeof(GLuint));
     Mesh light(lightVerts, lightInd, tex);
     mesh = light;
-    
     lightModel = glm::translate(lightModel, lightPos);
     
     lightShader.Activate();
@@ -158,6 +179,18 @@ LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/lig
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     resetVertices();
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
 
@@ -179,4 +212,5 @@ LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shader
     
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    
 }
