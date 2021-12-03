@@ -103,7 +103,6 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     
     
-    
     //This creates the light cube
     LightingCube ls(glm::vec3(-0.4f, 0.0f, 0.3f));
     sceneLights.push_back(ls.mesh);
@@ -132,7 +131,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     for (int i = 0; i < 10; i++){
         for (int f = 0; f < 10; f++){
             for (int v = 0; v < 10; v++){
-                glm::vec3 position = glm::vec3(0.1f * v, 0.1f * f, 0.1f * i);   //Assigns the position
+                glm::vec3 position = glm::vec3(0.2f * v, 0.2f * f, 0.2f * i);   //Assigns the position
                 Cube newBlock(position);                                        //Makes the block in the position
                 newBlock.LightSources.push_back(ls);                            //Pushes it to the block shader
                 sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
