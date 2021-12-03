@@ -5,10 +5,11 @@
 //  Created by Sylvia Sharpe on 12/2/21.
 //
 
+#include <filesystem>
 #include "World.h"
 #include "Cube.h"
 
-World::World() : shaderProgram("src/default.vert","src/default.frag"), lightShader("src/light.vert", "src/light.frag") {
+World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"), lightShader("src/Shaders/light.vert", "src/Shaders/light.frag") {
     //Texture map plane
     Vertex vertices[] =
     {//         COORDINATES     /         COLORS             /   TexCoord    /       NORMALS       //
@@ -66,7 +67,6 @@ World::World() : shaderProgram("src/default.vert","src/default.frag"), lightShad
     vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
     Mesh floor(verts, ind, tex);
     sceneMeshes.push_back(floor);
-    
     
     
     //Begins the shaders to the lighting mesh
@@ -127,7 +127,7 @@ World::World() : shaderProgram("src/default.vert","src/default.frag"), lightShad
     // Also by making a seperate vector2 or vec3 in the cubes, we can probably assign
     // Textures that way...
     //
-    /*
+    
     //This creates the 10x10x10 chunk
     for (int i = 0; i < 10; i++){
         for (int f = 0; f < 10; f++){
@@ -138,5 +138,5 @@ World::World() : shaderProgram("src/default.vert","src/default.frag"), lightShad
                 sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
             }
         }
-    }*/
+    }
 }

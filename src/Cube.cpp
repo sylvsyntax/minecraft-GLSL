@@ -7,18 +7,18 @@
 
 #include "Cube.h"
 
-Cube::Cube() : shaderProgram("src/default.vert","src/default.frag"){
+Cube::Cube() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"){
     //Cube
     Vertex cubeVertices[] =
-    { //     COORDINATES       //
-        Vertex{glm::vec3(-0.1f, -0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-0.1f, -0.1f, 0.1f)},
-        Vertex{glm::vec3(-0.1f, -0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-0.1f, -0.1f, -0.1f)},
-        Vertex{glm::vec3(0.1f, -0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, -0.1f, -0.1f)},
-        Vertex{glm::vec3(0.1f, -0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, -0.1f, 0.1f)},
-        Vertex{glm::vec3(-0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-0.1f, 0.1f, 0.1f)},
-        Vertex{glm::vec3(-0.1f, 0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-0.1f, 0.1f, -0.1f)},
-        Vertex{glm::vec3(0.1f, 0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, 0.1f, -0.1f)},
-        Vertex{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.1f, 0.1f, 0.1f)},
+    {          //         COORDINATES       //         NORMALS           //           COLOR          //       TEXCOORD       //
+        Vertex{glm::vec3(-0.1f, -0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(-0.1f, -0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(0.1f, -0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(0.1f, -0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(-0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(-0.1f, 0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(0.1f, 0.1f, -0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
     };
 
     GLuint cubeIndices[] =
@@ -39,7 +39,7 @@ Cube::Cube() : shaderProgram("src/default.vert","src/default.frag"){
     
     Texture textures[]
     {
-        Texture("src/Textures/terrain.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     
     vector<Vertex> cubeVerts(cubeVertices, cubeVertices + sizeof(cubeVertices) / sizeof(Vertex));
@@ -61,7 +61,7 @@ Cube::Cube() : shaderProgram("src/default.vert","src/default.frag"){
 
 
 
-Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/default.vert","src/default.frag"){
+Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"){
     //Cube
     Vertex cubeVertices[] =
     { //     COORDINATES       //
@@ -100,7 +100,7 @@ Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/default.vert","src/defaul
     
     Texture textures[]
     {
-        Texture("src/Textures/terrain.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     vector<Vertex> cubeVerts(cubeVertices, cubeVertices + sizeof(cubeVertices) / sizeof(Vertex));
     vector<GLuint> cubeInd(cubeIndices, cubeIndices + sizeof(cubeIndices) / sizeof(GLuint));
@@ -134,7 +134,7 @@ Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/default.vert","src/defaul
 
 
 
-LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/light.vert", "src/light.frag"){
+LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
     //Cube
     Vertex cubeVertices[] =
     { //     COORDINATES       //
@@ -172,7 +172,7 @@ LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/light.vert"
     
     Texture textures[]
     {
-        Texture("src/Textures/terrain.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     
     vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
@@ -189,7 +189,7 @@ LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/light.vert"
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 }
 
-LightingCube::LightingCube() : lightShader("src/light.vert", "src/light.frag"){
+LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
     //Cube
     Vertex cubeVertices[] =
     { //     COORDINATES       //
@@ -221,7 +221,7 @@ LightingCube::LightingCube() : lightShader("src/light.vert", "src/light.frag"){
     
     Texture textures[]
     {
-        Texture("src/Textures/terrain.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     
     vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
