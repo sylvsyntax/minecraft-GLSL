@@ -9,7 +9,7 @@
 #define CUBE_CLASS_H
 
 #include "Mesh.h"
-
+#include "shapes.h"
 
 class LightingCube
 {
@@ -31,6 +31,7 @@ class Cube
 public:
     Cube();
     Cube(glm::vec3 position);
+    Cube(int size, vec3 pos);
     
     vector<LightingCube> LightSources;
     
