@@ -226,7 +226,7 @@ LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shader
 
 //New cube method
 
-Cube::Cube(int size, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag") {
+Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag") {
     glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
@@ -296,7 +296,11 @@ Cube::Cube(int size, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
     
     Vertex cubeVertex[36];
     
-    
+    if(type == 2)
+        defaultColor = glm::vec3(-0.5f, 2, -0.5f);
+    else
+        defaultColor = glm::vec3(1, 1, 1);
+        
     for(int i = 0; i < 6; i++){
         cube[i].scale(vec3(0.2));
         cube[i].translate(pos);
@@ -325,11 +329,14 @@ Cube::Cube(int size, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
     
     Texture textures[]
     {
-        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
     vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
-    vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
+    vector<Texture> tex;
+    tex.push_back(textures[type]);
     
     glm::vec3 cubePos = position;
     glm::mat4 cubeModel = glm::mat4(1.0f);
@@ -347,7 +354,6 @@ Cube::Cube(int size, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
         glm::vec3 lightPos = i.lightPos;
         glm::mat4 lightModel = i.lightModel;
         lightModel = glm::translate(lightModel, lightPos);
-        
         glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), pos.getx(), pos.gety(), pos.getz());
     }

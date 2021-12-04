@@ -12,7 +12,7 @@
 World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"), lightShader("src/Shaders/light.vert", "src/Shaders/light.frag") {
     
     //This specifies point 0,0,0
-    LightingCube centerCube(glm::vec3(0.0f, 0.0f, 0.0f));
+    LightingCube centerCube(glm::vec3(0.0f, -0.5f, 0.0f));
     sceneMeshes.push_back(centerCube.mesh);
     
     // =====================================
@@ -58,15 +58,23 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     
     
     
-    
+    int blockType = 1;
     //This creates the 10x10x10 chunk
     for (int i = 0; i < 10; i++){
-        for (int f = 0; f < 10; f++){
-            for (int v = 0; v < 10; v++){
+        for (int v = 0; v < 10; v++){
+            for (int f = 0; f < 10; f++){
                 vec3 position = vec3(0.2f * v - 1.0f, 0.2f * f - 2.1f, 0.2f * i - 1.0f);   //Assigns the position
                 
-                                                                                //Moves over the position
-                Cube newBlock(1, position);                                        //Makes the block in the position
+                if(f >= 7 && f <= 8)
+                    blockType = 0;
+                else if (f >= 9)
+                    blockType = 2;
+                else
+                    blockType = 1;
+                
+                Cube newBlock(blockType, position);
+                
+                //Makes the block in the position
                 newBlock.LightSources.push_back(ls);                            //Pushes it to the block shader
                 sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
             }
