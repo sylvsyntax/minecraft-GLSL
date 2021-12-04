@@ -6,7 +6,8 @@
 //
 
 #include "Cube.h"
-
+#include "VBO.h"
+#include "BlockEnums.h"
 
 glm::vec3 regVecToGLM(vec3 pt){
     return glm::vec3(pt.getx(), pt.gety(), pt.getz());
@@ -88,18 +89,6 @@ Cube::Cube() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.fra
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 //Because we don't have enough vertices we cant build what we need to in order to properly assign the normals...
 Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"){
     
@@ -146,10 +135,6 @@ Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","sr
 
 
 
-
-
-
-
 LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
     
     lightPos.x += newPosition.x;
@@ -189,15 +174,6 @@ LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/lig
 
 
 
-
-
-
-
-
-
-
-
-
 LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
     
     
@@ -222,13 +198,11 @@ LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shader
 }
 
 
-
-
 //New cube method
 
-Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
+Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
     this->type = type;
-    if (type == -1) return;
+    if (type == blockType::air) return;
     glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
@@ -296,9 +270,9 @@ Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), s
     cube[5] = nef;
     cube[5].removeConstructors();
     
-    Vertex cubeVertex[36];
+    Vertex cubeVertex[36]{};
     
-    if(type == 2)
+    if(type == blockType::grass)
         defaultColor = glm::vec3(-0.5f, 2, -0.5f);
     else
         defaultColor = glm::vec3(1, 1, 1);
@@ -315,7 +289,7 @@ Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), s
     }
     
     
-    GLuint cubeInd[36 * 6];
+    GLuint cubeInd[36 * 6]{};
     for (int i = 0; i < (36 * 6); i++){
         cubeInd[i] = i;
     }
@@ -338,7 +312,7 @@ Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), s
     vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
     vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
     vector<Texture> tex;
-    tex.push_back(textures[type]);
+    tex.push_back(textures[(int)type]);
     
     glm::vec3 cubePos = position;
     glm::mat4 cubeModel = glm::mat4(1.0f);
@@ -362,9 +336,9 @@ Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), s
 }
 
 //Front, Bottom, Top, Back, Left, Right
-Cube::Cube(int type, vec3 pos, vector<int> sideExclusion) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
+Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
     this->type = type;
-    if (type == -1) return;
+    if (type == blockType::air) return;
     glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
@@ -431,10 +405,10 @@ Cube::Cube(int type, vec3 pos, vector<int> sideExclusion) : position(pos.getx(),
     nef.flip();
     cube[5] = nef;
     cube[5].removeConstructors();
+
+    vector<Vertex> cubeVertex(6 * sideExclusion.size());
     
-    Vertex cubeVertex[6 * sideExclusion.size()];
-    
-    if(type == 2)
+    if(type == blockType::grass)
         defaultColor = glm::vec3(-0.5f, 2, -0.5f);
     else
         defaultColor = glm::vec3(1, 1, 1);
@@ -443,23 +417,22 @@ Cube::Cube(int type, vec3 pos, vector<int> sideExclusion) : position(pos.getx(),
     for(int i = 0; i < 6; i++){
         cube[i].scale(vec3(0.2));
         cube[i].translate(pos);
-        for(int f : sideExclusion)
-            if(f == i){
-                cout << "test";
-                cubeVertex[v * 6 + 0] = {regVecToGLM(cube[i].t1->pt1), defaultNormal, defaultColor, glm::vec2(0, 0)};
-                cubeVertex[v * 6 + 1] = {regVecToGLM(cube[i].t1->pt2), defaultNormal, defaultColor, glm::vec2(1, 0)};
-                cubeVertex[v * 6 + 2] = {regVecToGLM(cube[i].t1->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                cubeVertex[v * 6 + 3] = {regVecToGLM(cube[i].t2->pt1), defaultNormal, defaultColor, glm::vec2(1, 1)};
-                cubeVertex[v * 6 + 4] = {regVecToGLM(cube[i].t2->pt2), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                cubeVertex[v * 6 + 5] = {regVecToGLM(cube[i].t2->pt3), defaultNormal, defaultColor, glm::vec2(1, 0)};
+        for(blockPos f : sideExclusion)
+            if((int)f == i){
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 0] = {regVecToGLM(cube[i].t1->pt1), defaultNormal, defaultColor, glm::vec2(0, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 1] = {regVecToGLM(cube[i].t1->pt2), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 2] = {regVecToGLM(cube[i].t1->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 3] = {regVecToGLM(cube[i].t2->pt1), defaultNormal, defaultColor, glm::vec2(1, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 4] = {regVecToGLM(cube[i].t2->pt2), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 5] = {regVecToGLM(cube[i].t2->pt3), defaultNormal, defaultColor, glm::vec2(1, 0)};
                 v++;
             }
     }
     
     
-    GLuint cubeInd[36 * sideExclusion.size()];
+    vector<GLuint> cubeInd;
     for (int i = 0; i < (36 * sideExclusion.size()); i++){
-        cubeInd[i] = i;
+        cubeInd.push_back(i);
     }
     
     
@@ -470,16 +443,16 @@ Cube::Cube(int type, vec3 pos, vector<int> sideExclusion) : position(pos.getx(),
         Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
-    vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
-    vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
+    //vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
+    //vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
     vector<Texture> tex;
-    tex.push_back(textures[type]);
+    tex.push_back(textures[(int)type]);
     
     glm::vec3 cubePos = position;
     glm::mat4 cubeModel = glm::mat4(1.0f);
     cubeModel = glm::translate(cubeModel, cubePos);
     
-    Mesh block(cubeVerts, cubeIndices, tex);
+    Mesh block(cubeVertex, cubeInd, tex);
     mesh = block;
     
     shaderProgram.Activate();

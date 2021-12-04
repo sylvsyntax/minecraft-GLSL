@@ -22,13 +22,13 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
         {
             for (int yy = 0; yy < MAX_HEIGHT; yy++)
             {
-                blockType BlockType = dirt;
+                blockType BlockType = blockType::dirt;
                 if (yy == (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
-                    BlockType = grass;
+                    BlockType = blockType::grass;
                 else if (yy < .5f * abs(maxHeights[xx * CHUNK_SIZE + zz]))
-                    BlockType = stone;
+                    BlockType = blockType::stone;
                 else if (yy > (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
-                    BlockType = air;
+                    BlockType = blockType::air;
                 glm::vec3 position = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
                 vec3 newPos = vec3(position.x, position.y, position.z);
                 //Moves over the position

@@ -36,73 +36,73 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
         }
     }
     
-    for(auto i : chunks){
+    for(auto & i : chunks){
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {
             for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
             {
                 for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
                 {
-                    if(i.blocks[x][y][z].type != air){
-                        vector<int> generateSide;
+                    if(i.blocks[x][y][z].type != blockType::air){
+                        vector<blockPos> generateSide;
                         //RIGHT SIDE
                         if(x == Chunk::CHUNK_SIZE - 1)
-                            for(auto f : chunks){
+                            for(auto & f : chunks){
                                 if(f.position.y == i.position.y + 1)
-                                    if(f.blocks[Chunk::CHUNK_SIZE - 1][y][z].type == air)
-                                        generateSide.push_back(sideRight);
+                                    if(f.blocks[Chunk::CHUNK_SIZE - 1][y][z].type == blockType::air)
+                                        generateSide.push_back(blockPos::sideRight);
                             }
                         else
-                            if(i.blocks[x+1][y][z].type == air)
-                                generateSide.push_back(sideRight);
+                            if(i.blocks[x+1][y][z].type == blockType::air)
+                                generateSide.push_back(blockPos::sideRight);
                         
                         //LEFT SIDE
                         if(x == 0)
-                            for(auto f : chunks){
+                            for(auto & f : chunks){
                                 if(f.position.y == i.position.y - 1)
-                                    if(f.blocks[0][y][z].type == air)
-                                        generateSide.push_back(sideLeft);
+                                    if(f.blocks[0][y][z].type == blockType::air)
+                                        generateSide.push_back(blockPos::sideLeft);
                             }
                         else
-                            if(i.blocks[x-1][y][z].type == air)
-                                generateSide.push_back(sideLeft);
+                            if(i.blocks[x-1][y][z].type == blockType::air)
+                                generateSide.push_back(blockPos::sideLeft);
                         
                         
                         //TOP
                         if(y == Chunk::MAX_HEIGHT)
-                            generateSide.push_back(top);
+                            generateSide.push_back(blockPos::top);
                         else
-                            if(i.blocks[x][y+1][z].type == air)
-                                generateSide.push_back(top);
+                            if(i.blocks[x][y+1][z].type == blockType::air)
+                                generateSide.push_back(blockPos::top);
                         
                         //BOTTOM
                         if(y != 0)
-                            if(i.blocks[x][y-1][z].type == air)
-                                generateSide.push_back(bottom);
+                            if(i.blocks[x][y-1][z].type == blockType::air)
+                                generateSide.push_back(blockPos::bottom);
                         
                         
                         //BACK
                         if(z == Chunk::CHUNK_SIZE - 1)
-                            for(auto f : chunks){
+                            for(auto & f : chunks){
                                 if(f.position.x == i.position.x + 1)
-                                    if(f.blocks[x][y][0].type == air)
-                                        generateSide.push_back(back);
+                                    if(f.blocks[x][y][0].type == blockType::air)
+                                        generateSide.push_back(blockPos::back);
                             }
                         else
-                            if(i.blocks[x][y][z+1].type == air)
-                                generateSide.push_back(back);
+                            if(i.blocks[x][y][z+1].type == blockType::air)
+                                generateSide.push_back(blockPos::back);
                         
                         
                         //FRONT
                         if(z == 0)
-                            for(auto f : chunks){
+                            for(auto & f : chunks){
                                 if(f.position.x == i.position.x - 1)
-                                    if(f.blocks[x][y][Chunk::CHUNK_SIZE - 1].type == air)
-                                        generateSide.push_back(front);
+                                    if(f.blocks[x][y][Chunk::CHUNK_SIZE - 1].type == blockType::air)
+                                        generateSide.push_back(blockPos::front);
                             }
                         else
-                            if(i.blocks[x][y][z-1].type == air)
-                                generateSide.push_back(front);
+                            if(i.blocks[x][y][z-1].type == blockType::air)
+                                generateSide.push_back(blockPos::front);
                         
                         
                         
@@ -156,9 +156,6 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     sceneMeshes.push_back(gbCube2.mesh);
     
     */
-    
-    
-    
     
     
     lightShader.Activate();

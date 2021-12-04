@@ -1,7 +1,6 @@
 #ifndef CHUNK_CLASS_H
 #define CHUNK_CLASS_H
 
-#include "Cube.h"
 #include "Block.h"
 
 class Chunk
