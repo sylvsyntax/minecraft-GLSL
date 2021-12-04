@@ -16,21 +16,11 @@
 World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"), lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"), sun(glm::vec3(0.0f,0.0f,0.0f)) {
     
     //This specifies point 0,0,0
-   // LightingCube centerCube(glm::vec3(0.0f, 0.0f, 0.0f));
+    //LightingCube centerCube(glm::vec3(0.0f, 0.0f, 0.0f));
     sceneMeshes.push_back(sun.mesh);
     
-    // =====================================
-    //
-    //              ISSUE HERE:
-    //
-    // ======================================
-    
-    //This creates the light cube
-    //The issue is the light cube is supposed to be at point 0, 0.2 and 0
-    //That's the block above the center block
-    
     //glm::vec3 lightBlockPos = glm::vec3(0.0f, 0.2f, 0.0f);
-   // LightingCube ls(lightBlockPos);
+    // LightingCube ls(lightBlockPos);
     sceneLights.push_back(sun.mesh);
     
     
@@ -58,20 +48,47 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
         }
     }
 */
-    //Random Cube
-    glm::vec3 position = glm::vec3(-0.2f, -0.4f, -0.4f);             //Assigns the position
-    Cube newBlock(position);                                        //Makes the block in the position
-    newBlock.LightSources.push_back(sun);                            //Pushes it to the block shader
-    sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
     
     Cube airBlock(glm::vec3(glm::vec3(0.0, 0.4f, 0.0f)));
     
     
+    
+    //========================================================================================
+    //                              EXAMPLES OF BLOCK BUILDING
+    //========================================================================================
+    
+    
+    
+    //======================
+    //  How to build a block
+    //======================
+    
     //Random Block Test
-    Block grassBlock = Block(vec3(-0.4, 1, 0), grass);
-    Cube gbCube = grassBlock.buildCube();
-    gbCube.LightSources.push_back(sun);
-    sceneMeshes.push_back(gbCube.mesh);
+    vector<int> faces;          //These are the faces we ar showing
+    faces.push_back(top);       //Because of the enum (stored in block.h) we can just say what side we want
+    faces.push_back(sideRight);
+    faces.push_back(sideLeft);
+    
+    Block grassBlock = Block(vec3(-0.4, 1, 0), grass, faces);   //Now we build the block
+    Cube gbCube = grassBlock.buildCube();                       //We store it's cube
+    gbCube.LightSources.push_back(sun);                         //We apply its light source
+    sceneMeshes.push_back(gbCube.mesh);                         //And we push it to the scene
+    
+    
+    
+    
+    //======================
+    //  Default Block
+    //======================
+    Block grassBlock2 = Block(vec3(-1, 1, 0), grass);       //By default, without including the faces
+    Cube gbCube2 = grassBlock2.buildCube();                 //We build every face
+    gbCube2.LightSources.push_back(sun);
+    sceneMeshes.push_back(gbCube2.mesh);
+    
+    
+    
+    
+    
     
     
     lightShader.Activate();
