@@ -26,33 +26,103 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     
 /*                      Enable when working with chunks
  --------------------------------------------------------------------------------
+ */
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
             Chunk testChunk(i, j);
-
-            for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
-            {
-                for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
-                {
-                    for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
-                    {
-                        testChunk.blocks[x][y][z].LightSources.push_back(sun);
-                        sceneMeshes.push_back(testChunk.blocks[x][y][z].mesh);
-                    }
-                }
-            }
-
             chunks.push_back(testChunk);
         }
     }
-*/
+    
+    for(auto i : chunks){
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
+            {
+                for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
+                {
+                    if(i.blocks[x][y][z].type != air){
+                        vector<int> generateSide;
+                        //RIGHT SIDE
+                        if(x == Chunk::CHUNK_SIZE - 1)
+                            for(auto f : chunks){
+                                if(f.position.y == i.position.y + 1)
+                                    if(f.blocks[Chunk::CHUNK_SIZE - 1][y][z].type == air)
+                                        generateSide.push_back(sideRight);
+                            }
+                        else
+                            if(i.blocks[x+1][y][z].type == air)
+                                generateSide.push_back(sideRight);
+                        
+                        //LEFT SIDE
+                        if(x == 0)
+                            for(auto f : chunks){
+                                if(f.position.y == i.position.y - 1)
+                                    if(f.blocks[0][y][z].type == air)
+                                        generateSide.push_back(sideLeft);
+                            }
+                        else
+                            if(i.blocks[x-1][y][z].type == air)
+                                generateSide.push_back(sideLeft);
+                        
+                        
+                        //TOP
+                        if(y == Chunk::MAX_HEIGHT)
+                            generateSide.push_back(top);
+                        else
+                            if(i.blocks[x][y+1][z].type == air)
+                                generateSide.push_back(top);
+                        
+                        //BOTTOM
+                        if(y != 0)
+                            if(i.blocks[x][y-1][z].type == air)
+                                generateSide.push_back(bottom);
+                        
+                        
+                        //BACK
+                        if(z == Chunk::CHUNK_SIZE - 1)
+                            for(auto f : chunks){
+                                if(f.position.x == i.position.x + 1)
+                                    if(f.blocks[x][y][0].type == air)
+                                        generateSide.push_back(back);
+                            }
+                        else
+                            if(i.blocks[x][y][z+1].type == air)
+                                generateSide.push_back(back);
+                        
+                        
+                        //FRONT
+                        if(z == 0)
+                            for(auto f : chunks){
+                                if(f.position.x == i.position.x - 1)
+                                    if(f.blocks[x][y][Chunk::CHUNK_SIZE - 1].type == air)
+                                        generateSide.push_back(front);
+                            }
+                        else
+                            if(i.blocks[x][y][z-1].type == air)
+                                generateSide.push_back(front);
+                        
+                        
+                        
+                        
+                        //Building the blocks
+                        i.blocks[x][y][z].sideExclusion = generateSide;
+                        Cube generateBlock = i.blocks[x][y][z].buildCube();
+                        generateBlock.LightSources.push_back(sun);
+                        sceneMeshes.push_back(generateBlock.mesh);
+                    }
+                }
+            }
+        }
+    }
+
     
     Cube airBlock(glm::vec3(glm::vec3(0.0, 0.4f, 0.0f)));
     
     
-    
+    /*
     //========================================================================================
     //                              EXAMPLES OF BLOCK BUILDING
     //========================================================================================
@@ -85,7 +155,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     gbCube2.LightSources.push_back(sun);
     sceneMeshes.push_back(gbCube2.mesh);
     
-    
+    */
     
     
     
