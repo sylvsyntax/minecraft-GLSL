@@ -34,8 +34,8 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     //This is an issue.
     
     //Random Cube
-    glm::vec3 position = glm::vec3(-0.2f, -0.4f, -0.4f);             //Assigns the position
-    Cube newBlock(position);                                        //Makes the block in the position
+    vec3 position = vec3(-0.2f, 0.4f, -0.8f);             //Assigns the position
+    Cube newBlock(1, position);                                        //Makes the block in the position
     newBlock.LightSources.push_back(ls);                            //Pushes it to the block shader
     sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
     
@@ -63,7 +63,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     for (int i = 0; i < 10; i++){
         for (int f = 0; f < 10; f++){
             for (int v = 0; v < 10; v++){
-                vec3 position = vec3(0.2f * v + 0.5f, 0.2f * f + 1.0f, 0.2f * i);   //Assigns the position
+                vec3 position = vec3(0.2f * v - 1.0f, 0.2f * f - 2.1f, 0.2f * i - 1.0f);   //Assigns the position
                 
                                                                                 //Moves over the position
                 Cube newBlock(1, position);                                        //Makes the block in the position
