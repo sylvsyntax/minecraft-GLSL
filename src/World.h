@@ -9,11 +9,12 @@
 #define WORLD_CLASS_H
 
 #include "Mesh.h"
-
+#include "Cube.h"
 class World
 {
 public:
     World();
+    LightingCube sun;
     std::vector<Mesh> sceneMeshes;
     std::vector<Mesh> sceneLights;
     Shader shaderProgram;

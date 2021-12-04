@@ -51,7 +51,7 @@ vec4 direcLight()
 	vec3 normal = normalize(Normal);
 
 	// must be opposite direction of where you want to face
-	vec3 lightDirection = normalize(vec3(1.0f, 1.0f, 0.0f));
+	vec3 lightDirection = normalize(vec3(.75f, 1.0f, 0.75f));
 
 	float diffuse = max(dot(normal, lightDirection), 0.0f);
 
@@ -67,5 +67,6 @@ vec4 direcLight()
 
 void main()
 {
-	FragColor = pointLight();
+	
+	FragColor = direcLight();
 }
