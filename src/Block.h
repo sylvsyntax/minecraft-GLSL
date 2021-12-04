@@ -14,7 +14,7 @@
 #include "Cube.h"
 
 enum blockType {
-    air = -1, dirt = 0, stone = 1, grass = 2,
+    air = -1, dirt = 0, stone = 1, grass = 2
 };
 
 class Block
@@ -22,14 +22,15 @@ class Block
 public:
     Block();
     
-    Block(vec3 pos, Cube cube, blockType type);
+    Block(vec3 pos, blockType type);
     
+    //Front, Bottom, Top, Back, Left, Right
     
     vec3 pos;
-    Cube buildCube;
+    Cube buildCube();
     blockType type;
     
-    void buildBlock();
+    Cube buildBlock();
 };
 
 

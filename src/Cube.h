@@ -32,13 +32,13 @@ public:
     Cube();
     Cube(glm::vec3 position);
     Cube(int type, vec3 pos);
+    Cube(int type, vec3 pos, vector<int> sideExclusion);
     int type;
     vector<LightingCube> LightSources;
     
     glm::vec3 position;
     Shader shaderProgram;
     Mesh mesh;
-    int type;
     //Cube(Cube cubeType, glm::vec3 position);
 
 };

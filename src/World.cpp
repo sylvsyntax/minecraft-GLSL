@@ -11,6 +11,7 @@
 #include "World.h"
 #include "Cube.h"
 #include "Chunk.h"
+#include "Block.h"
 
 World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"), lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"), sun(glm::vec3(0.0f,0.0f,0.0f)) {
     
@@ -32,10 +33,9 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
    // LightingCube ls(lightBlockPos);
     sceneLights.push_back(sun.mesh);
     
-    //The light cube instead is at point 0, 0, 0 since center cube is storing
-    //the information of where the center is and moving the light model there.
-    //This is an issue.
-
+    
+/*                      Enable when working with chunks
+ --------------------------------------------------------------------------------
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -57,7 +57,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
             chunks.push_back(testChunk);
         }
     }
-
+*/
     //Random Cube
     glm::vec3 position = glm::vec3(-0.2f, -0.4f, -0.4f);             //Assigns the position
     Cube newBlock(position);                                        //Makes the block in the position
@@ -67,6 +67,11 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     Cube airBlock(glm::vec3(glm::vec3(0.0, 0.4f, 0.0f)));
     
     
+    //Random Block Test
+    Block grassBlock = Block(vec3(-0.4, 1, 0), grass);
+    Cube gbCube = grassBlock.buildCube();
+    gbCube.LightSources.push_back(sun);
+    sceneMeshes.push_back(gbCube.mesh);
     
     
     lightShader.Activate();
