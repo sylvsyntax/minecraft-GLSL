@@ -21,12 +21,17 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
     {
         for (int zz = 0; zz < CHUNK_SIZE; zz++)
         {
-            for (int yy = 0; yy < abs(maxHeights[xx * CHUNK_SIZE + zz]); yy++)
+            for (int yy = 0; yy <= (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])); yy++)
             {
+                int blockType = 0;
+                if(yy == (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
+                    blockType = 2;
+                else if(yy < .5f * abs(maxHeights[xx * CHUNK_SIZE + zz]))
+                    blockType = 1;
                 glm::vec3 position = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
                 vec3 newPos = vec3(position.x, position.y, position.z);
                 //Moves over the position
-                Cube newBlock(0, newPos);
+                Cube newBlock(blockType, newPos);
                 blocks.push_back(newBlock);
             }
         }
