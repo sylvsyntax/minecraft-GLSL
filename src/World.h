@@ -9,6 +9,7 @@
 #define WORLD_CLASS_H
 
 #include "Mesh.h"
+#include "Chunk.h"
 #include "Cube.h"
 class World
 {
@@ -17,6 +18,7 @@ public:
     LightingCube sun;
     std::vector<Mesh> sceneMeshes;
     std::vector<Mesh> sceneLights;
+    std::vector<Chunk> chunks;
     Shader shaderProgram;
     Shader lightShader;
 };

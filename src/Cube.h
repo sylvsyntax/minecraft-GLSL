@@ -38,6 +38,7 @@ public:
     glm::vec3 position;
     Shader shaderProgram;
     Mesh mesh;
+    int type;
     //Cube(Cube cubeType, glm::vec3 position);
 
 };

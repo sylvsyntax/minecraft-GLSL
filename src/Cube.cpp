@@ -226,7 +226,9 @@ LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shader
 
 //New cube method
 
-Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag") {
+Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
+    this->type = type;
+    if (type == -1) return;
     glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
