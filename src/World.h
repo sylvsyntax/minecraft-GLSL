@@ -18,7 +18,7 @@ public:
     LightingCube sun;
     std::vector<Mesh> sceneMeshes;
     std::vector<Mesh> sceneLights;
-    std::vector<Chunk> chunks;
+    std::vector<vector<Chunk>> chunks;
     Shader shaderProgram;
     Shader lightShader;
 };

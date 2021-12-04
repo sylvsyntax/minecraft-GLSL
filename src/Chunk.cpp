@@ -35,8 +35,6 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
                 Block newBlock(newPos, BlockType);
                 newBlock.type = BlockType;
                 blocks[xx][yy][zz] = newBlock;
-
-                
             }
         }
     }
