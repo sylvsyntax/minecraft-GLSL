@@ -75,7 +75,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     
     
     
-    int blockType = 1;
+    //int blockType = 1;
     //This creates the 10x10x10 chunk
     /*for (int i = 0; i < 10; i++){
         for (int v = 0; v < 10; v++){

@@ -10,7 +10,7 @@ public:
 	const int MAX_HEIGHT = 25;
 	// https://stackoverflow.com/a/7367817
 	// 1D to 3D 
-	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
+	// blocks[x + WIDTH * (y * DEPTH * z)] = x,y,z
 	vector<Cube> blocks;
 	glm::vec2 position;
 	

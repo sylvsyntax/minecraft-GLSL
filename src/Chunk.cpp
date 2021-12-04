@@ -28,11 +28,14 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
                     blockType = 2;
                 else if(yy < .5f * abs(maxHeights[xx * CHUNK_SIZE + zz]))
                     blockType = 1;
+                else
+                    blockType = 0;
                 glm::vec3 position = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
                 vec3 newPos = vec3(position.x, position.y, position.z);
                 //Moves over the position
                 Cube newBlock(blockType, newPos);
                 blocks.push_back(newBlock);
+                
             }
         }
     }
