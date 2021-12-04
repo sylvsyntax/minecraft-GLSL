@@ -88,6 +88,18 @@ Cube::Cube() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.fra
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 //Because we don't have enough vertices we cant build what we need to in order to properly assign the normals...
 Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"){
     
@@ -134,6 +146,10 @@ Cube::Cube(glm::vec3 newPosition) : shaderProgram("src/Shaders/default.vert","sr
 
 
 
+
+
+
+
 LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
     
     lightPos.x += newPosition.x;
@@ -171,6 +187,17 @@ LightingCube::LightingCube(glm::vec3 newPosition) : lightShader("src/Shaders/lig
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"){
     
     
@@ -197,31 +224,11 @@ LightingCube::LightingCube() : lightShader("src/Shaders/light.vert", "src/Shader
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //New cube method
 
-Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag") {
-    
-    if(type == -1)
-        return;
-    
+Cube::Cube(int type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
     this->type = type;
+    if (type == -1) return;
     glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
@@ -230,18 +237,18 @@ Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
     vec3 defaultpt1 = vec3(0, 1, 0);
     vec3 defaultpt2 = vec3(1, 0, 0);
     vec3 defaultpt3 = vec3(0);
-    
+
     //And these are the default triangles used for nef. The singular face we will manipulate to build this box.
     triangle trg = triangle(defaultpt1, defaultpt2, defaultpt3);
     triangle trg2 = triangle(defaultpt1, defaultpt2, defaultpt3);
     //The rotation is done to complete the face.
     trg2.rotateAcrossAxis('x');
-    
+
     //Then we assign the triangles to the face that we will be manipulating
     face nef = face(&trg, &trg2);
     cube[0] = nef;
     cube[0].removeConstructors();
-    
+
     //This makes the bottom of the box
     //Essentially we rotate it 90 degrees backwards so it's facing inside
     //Than we flip the shape by switching the direction of the triangles
@@ -249,38 +256,38 @@ Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
     nef.flip();
     cube[1] = nef;
     cube[1].removeConstructors();
-    
+
     //We can then move the shape up
     //And flip it again
     nef.translate(vec3(0, 1, 0));
     nef.flip();
     cube[2] = nef;
     cube[2].removeConstructors();
-    
+
     //Now we reset to the default position and flip
     //the triangles again
     trg = triangle(defaultpt1, defaultpt2, defaultpt3);
     trg2 = triangle(defaultpt1, defaultpt2, defaultpt3);
     trg2.rotateAcrossAxis('x');
-    
+
     //We translate the shape backwards and flip it so it makes the back wall
     nef.translate(vec3(0, 0, 1));
     nef.flip();
     cube[3] = nef;
     cube[3].removeConstructors();
-    
+
     //Than we move the shape the opposite direction
     //Repeating the steps back to normal so its facing
     //the original position
     nef.translate(vec3(0, 0, -1));
     nef.flip();
-    
+
     //Now we can rotate the shape sideways and flip it
     nef.rotateX90();
     nef.flip();
     cube[4] = nef;
     cube[4].removeConstructors();
-    
+
     //Than we translate it by the x value so it can be in
     //the propper position, and we flip it so it faces
     //the right direction
@@ -295,10 +302,7 @@ Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
         defaultColor = glm::vec3(-0.5f, 2, -0.5f);
     else
         defaultColor = glm::vec3(1, 1, 1);
-    
-    
-    
-    
+        
     for(int i = 0; i < 6; i++){
         cube[i].scale(vec3(0.2));
         cube[i].translate(pos);
@@ -329,8 +333,7 @@ Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
     {
         Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
     vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
@@ -356,4 +359,7 @@ Cube::Cube(int type, vec3 pos) : shaderProgram("src/Shaders/default.vert","src/S
         glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), pos.getx(), pos.gety(), pos.getz());
     }
+    resetVertices();
+    
+    
 }

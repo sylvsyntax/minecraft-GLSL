@@ -12,7 +12,6 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
         {
             float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
             maxHeights.push_back(val * .1f * MAX_HEIGHT + MAX_HEIGHT / 2);
-            cout << val << " ";
         }
     }
     // [i * CHUNK_SIZE + j]
@@ -21,20 +20,22 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
     {
         for (int zz = 0; zz < CHUNK_SIZE; zz++)
         {
-            for (int yy = 0; yy <= (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])); yy++)
+            for (int yy = 0; yy < MAX_HEIGHT; yy++)
             {
                 int blockType = 0;
-                if(yy == (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
+                if (yy == (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
                     blockType = 2;
-                else if(yy < .5f * abs(maxHeights[xx * CHUNK_SIZE + zz]))
+                else if (yy < .5f * abs(maxHeights[xx * CHUNK_SIZE + zz]))
                     blockType = 1;
-                else
-                    blockType = 0;
+                else if (yy > (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
+                    blockType = -1;
                 glm::vec3 position = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
                 vec3 newPos = vec3(position.x, position.y, position.z);
                 //Moves over the position
                 Cube newBlock(blockType, newPos);
-                blocks.push_back(newBlock);
+                newBlock.type = blockType;
+                blocks[xx][yy][zz] = newBlock;
+
                 
             }
         }

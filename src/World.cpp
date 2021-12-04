@@ -42,14 +42,21 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
         {
             Chunk testChunk(i, j);
 
-            for (auto& block : testChunk.blocks)
+            for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
             {
-                block.LightSources.push_back(sun);
-                sceneMeshes.push_back(block.mesh);
+                for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
+                {
+                    for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
+                    {
+                        testChunk.blocks[x][y][z].LightSources.push_back(sun);
+                        sceneMeshes.push_back(testChunk.blocks[x][y][z].mesh);
+                    }
+                }
             }
+
+            chunks.push_back(testChunk);
         }
     }
-
 
     //Random Cube
     glm::vec3 position = glm::vec3(-0.2f, -0.4f, -0.4f);             //Assigns the position
