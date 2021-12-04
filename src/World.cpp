@@ -60,6 +60,8 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     Cube airBlock(glm::vec3(glm::vec3(0.0, 0.4f, 0.0f)));
     
     
+    
+    
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
@@ -73,26 +75,23 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     
     
     
-    
-    
-    
-    // Don't do this... this is broken after the normals were added
-    // But if you do end up enabling this... I'm sorry...
-    
-    
-    //
-    // Also by making a seperate vector2 or vec3 in the cubes, we can probably assign
-    // Textures that way...
-    //
-    
+    int blockType = 1;
     //This creates the 10x10x10 chunk
-    /*for (int i = 0; i < 10; i++) {
-        for (int f = 0; f < 10; f++){
-            for (int v = 0; v < 10; v++){
-                glm::vec3 position = glm::vec3(0.2f * v, 0.2f * f, 0.2f * i);   //Assigns the position
-                position = glm::vec3(position.x + 0.4f, position.y + -1.0f, position.z + -0.8f);
-                                                                                //Moves over the position
-                Cube newBlock(position);                                        //Makes the block in the position
+    /*for (int i = 0; i < 10; i++){
+        for (int v = 0; v < 10; v++){
+            for (int f = 0; f < 10; f++){
+                vec3 position = vec3(0.2f * v - 1.0f, 0.2f * f - 2.1f, 0.2f * i - 1.0f);   //Assigns the position
+                
+                if(f >= 7 && f <= 8)
+                    blockType = 0;
+                else if (f >= 9)
+                    blockType = 2;
+                else
+                    blockType = 1;
+                
+                Cube newBlock(blockType, position);
+                
+                //Makes the block in the position
                 newBlock.LightSources.push_back(ls);                            //Pushes it to the block shader
                 sceneMeshes.push_back(newBlock.mesh);                           //Pushes it to the world renderer
             }
