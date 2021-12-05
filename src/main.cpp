@@ -57,6 +57,8 @@ int main()
     World minecraft;
     
     int curxChunk = -1, curyChunk = -1;
+
+    bool generating = false;
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -67,12 +69,14 @@ int main()
 
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
-        if (curxChunk != camera.Position.x / 8 || curyChunk != camera.Position.y / 8)
+        if (!generating && (curxChunk != camera.Position.x / Chunk::CHUNK_SIZE || curyChunk != camera.Position.z / Chunk::CHUNK_SIZE))
         {
-            minecraft.generateChunk(camera.Position.x / 8, camera.Position.y / 8);
+            generating = true;
+            minecraft.generateChunk(camera.Position.x / Chunk::CHUNK_SIZE, camera.Position.z / Chunk::CHUNK_SIZE);
+            curxChunk = camera.Position.x / 8;
+            curyChunk = camera.Position.z / 8;
+            generating = false;
         }
-        curxChunk = camera.Position.x / 8;
-        curyChunk = camera.Position.y / 8;
         for (auto & i : minecraft.sceneMeshes)
         {
             i.Draw(minecraft.shaderProgram, camera);

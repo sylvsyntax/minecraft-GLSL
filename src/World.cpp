@@ -125,7 +125,7 @@ void World::updateChunks()
                         vector<blockPos> generateSide;
                         //RIGHT SIDE
                         if (x == Chunk::CHUNK_SIZE - 1) {
-                            if (chunks.find(Vector2Key{ i.second.position.x + 1, i.second.position.y }) == chunks.end())
+                            if (chunks.find(Vector2Key{ i.second.position.x + 1, i.second.position.y }) != chunks.end())
                             {
                                 if (chunks[Vector2Key{ i.second.position.x + 1,i.second.position.y }].blocks[0][y][z].type == blockType::air)
                                 {
@@ -169,7 +169,7 @@ void World::updateChunks()
 
                         //BACK
                         if (z == Chunk::CHUNK_SIZE - 1) {
-                            if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y + 1 }) == chunks.end())
+                            if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y + 1 }) != chunks.end())
                             {
                                 if (chunks[Vector2Key{ i.second.position.x,i.second.position.y + 1 }].blocks[x][y][0].type == blockType::air)
                                 {
@@ -205,14 +205,13 @@ void World::updateChunks()
                         i.second.blocks[x][y][z].sideExclusion = generateSide;
                         Cube generateBlock = i.second.blocks[x][y][z].buildCube();
                         //generateBlock.LightSources.push_back(sun);
-                        //sceneMeshes.push_back(generateBlock.mesh);
+                        sceneMeshes.push_back(generateBlock.mesh);
                     }
                 }
             }
-            
+
         }
     }
-
 
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
