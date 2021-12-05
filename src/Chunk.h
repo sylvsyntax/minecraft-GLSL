@@ -12,8 +12,9 @@ public:
 	// 1D to 3D 
 	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
 	Block blocks[CHUNK_SIZE][MAX_HEIGHT][CHUNK_SIZE];
-	glm::vec2 position;
+	glm::ivec2 position;
 	
+	Chunk();
 	Chunk(int x, int y);
 };
 

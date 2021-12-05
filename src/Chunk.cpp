@@ -2,7 +2,9 @@
 
 float perlin(float x, float y);
 
-Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
+Chunk::Chunk() : position(glm::ivec2(1000,1000)) {}
+
+Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
 {
     position = glm::vec2(x, y);
     vector<float> maxHeights;
@@ -23,11 +25,11 @@ Chunk::Chunk(int x, int y) : position(glm::vec2(x,y))
             for (int yy = 0; yy < MAX_HEIGHT; yy++)
             {
                 blockType BlockType = blockType::dirt;
-                if (yy == (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
+                if (yy == (int)round(abs(maxHeights[static_cast<std::vector<float, std::allocator<float>>::size_type>(xx) * CHUNK_SIZE + zz])))
                     BlockType = blockType::grass;
-                else if (yy < .5f * abs(maxHeights[xx * CHUNK_SIZE + zz]))
+                else if (yy < .5f * abs(maxHeights[static_cast<std::vector<float, std::allocator<float>>::size_type>(xx) * CHUNK_SIZE + zz]))
                     BlockType = blockType::stone;
-                else if (yy > (int)round(abs(maxHeights[xx * CHUNK_SIZE + zz])))
+                else if (yy > (int)round(abs(maxHeights[static_cast<std::vector<float, std::allocator<float>>::size_type>(xx) * CHUNK_SIZE + zz])))
                     BlockType = blockType::air;
                 glm::vec3 position = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
                 vec3 newPos = vec3(position.x, position.y, position.z);
@@ -74,7 +76,7 @@ vector2 randomGradient(int ix, int iy) {
     b *= 1911520717; a ^= b << s | b >> w - s;
     a *= 2048419325;
     float random = a * (3.14159265 / ~(~0u >> 1)); // in [0, 2*Pi]
-    vector2 v;
+    vector2 v{};
     v.x = sin(random); v.y = cos(random);
     return v;
 }

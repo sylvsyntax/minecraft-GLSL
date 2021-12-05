@@ -23,118 +23,16 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     // LightingCube ls(lightBlockPos);
     sceneLights.push_back(sun.mesh);
     
+    updateChunks();
     
 /*                      Enable when working with chunks
  --------------------------------------------------------------------------------
  */
-    for (int i = 0; i < 3; i++)
-    {
-        vector<Chunk> curChunks;
-        for (int j = 0; j < 3; j++)
-        {
-            Chunk testChunk(i, j);
-            curChunks.push_back(testChunk);
-
-        }
-        chunks.push_back(curChunks);
-    }
-    for (auto& j : chunks)
-    for (auto& i : j) {
-        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
-        {
-            for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
-            {
-                for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
-                {
-                    if(i.blocks[x][y][z].type != blockType::air){
-                        vector<blockPos> generateSide;
-                        //RIGHT SIDE
-                        if (x == Chunk::CHUNK_SIZE - 1) {
-                            if (i.position.x + 1 < chunks.size())
-                            {
-                                if (chunks[i.position.x + 1][i.position.y].blocks[0][y][z].type == blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::sideRight);
-                                }
-                            } else
-                                generateSide.push_back(blockPos::sideRight);
-                        }
-                        else if(i.blocks[x+1][y][z].type == blockType::air)
-                                generateSide.push_back(blockPos::sideRight);
-                        
-                        
-                        //LEFT SIDE
-                        if (x == 0) {
-                            if (i.position.x != 0)
-                            {
-                                if (chunks[i.position.x - 1][i.position.y].blocks[Chunk::CHUNK_SIZE - 1][y][z].type == blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::sideLeft);
-                                }
-                            } else
-                                generateSide.push_back(blockPos::sideLeft);
-                        }
-                        else if(i.blocks[x-1][y][z].type == blockType::air)
-                                generateSide.push_back(blockPos::sideLeft);
-                        
-                        
-                        //TOP
-                        if(y == Chunk::MAX_HEIGHT - 1)
-                            generateSide.push_back(blockPos::top);
-                        else if(i.blocks[x][y+1][z].type == blockType::air)
-                                generateSide.push_back(blockPos::top);
-                        
-                        //BOTTOM
-                        if(y != 0)
-                            if(i.blocks[x][y-1][z].type == blockType::air)
-                                generateSide.push_back(blockPos::bottom);
-                        
-                        
-                        //BACK
-                        if (z == Chunk::CHUNK_SIZE - 1) {
-                            if (i.position.y + 1 < chunks[i.position.x].size())
-                            {
-                                if (chunks[i.position.x][i.position.y + 1].blocks[x][y][0].type == blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::back);
-                                }
-                            } else 
-                                generateSide.push_back(blockPos::back);
-                        }
-                        else if(i.blocks[x][y][z+1].type == blockType::air)
-                                generateSide.push_back(blockPos::back);
-                        
-                        
-                        //FRONT
-                        if (z == 0) {
-                            if (i.position.y != 0)
-                            {
-                                if (chunks[i.position.x][i.position.y - 1].blocks[x][y][Chunk::CHUNK_SIZE - 1].type == blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::front);
-                                }
-                            } else
-                                generateSide.push_back(blockPos::front);
-                        }
-                        else if(i.blocks[x][y][z-1].type == blockType::air)
-                                generateSide.push_back(blockPos::front);
-                        
-                        
-                        
-                        
-                        //Building the blocks
-                        i.blocks[x][y][z].sideExclusion = generateSide;
-                        Cube generateBlock = i.blocks[x][y][z].buildCube();
-                        generateBlock.LightSources.push_back(sun);
-                        sceneMeshes.push_back(generateBlock.mesh);
-                    }
-                }
-            }
-        }
-    }
+    
+    
 
     
-    Cube airBlock(glm::vec3(glm::vec3(0.0, 0.4f, 0.0f)));
+    //Cube airBlock(glm::vec3(glm::vec3(0.0, 0.4f, 0.0f)));
     
     
     /*
@@ -173,17 +71,6 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     */
     
     
-    lightShader.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
-    glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
-    shaderProgram.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
-    
-    
-    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
-    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), sun.lightPos.x, sun.lightPos.y, sun.lightPos.z);
-    
-    
     
     
     //int blockType = 1;
@@ -216,3 +103,124 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
 }
 
+void World::generateChunk(int x, int y)
+{
+    Chunk chunk(x, y);
+    chunks[Vector2Key{ x, y }] = chunk;
+
+    updateChunks();
+
+}
+
+void World::updateChunks()
+{
+    for (auto& i : chunks) {
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
+            {
+                for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
+                {
+                    if (i.second.blocks[x][y][z].type != blockType::air) {
+                        vector<blockPos> generateSide;
+                        //RIGHT SIDE
+                        if (x == Chunk::CHUNK_SIZE - 1) {
+                            if (chunks.find(Vector2Key{ i.second.position.x + 1, i.second.position.y }) == chunks.end())
+                            {
+                                if (chunks[Vector2Key{ i.second.position.x + 1,i.second.position.y }].blocks[0][y][z].type == blockType::air)
+                                {
+                                    generateSide.push_back(blockPos::sideRight);
+                                }
+                            }
+                            else
+                                generateSide.push_back(blockPos::sideRight);
+                        }
+                        else if (i.second.blocks[x + 1][y][z].type == blockType::air)
+                            generateSide.push_back(blockPos::sideRight);
+
+
+                        //LEFT SIDE
+                        if (x == 0) {
+                            if (i.second.position.x != 0)
+                            {
+                                if (chunks[Vector2Key{ i.second.position.x - 1,i.second.position.y }].blocks[Chunk::CHUNK_SIZE - 1][y][z].type == blockType::air)
+                                {
+                                    generateSide.push_back(blockPos::sideLeft);
+                                }
+                            }
+                            else
+                                generateSide.push_back(blockPos::sideLeft);
+                        }
+                        else if (i.second.blocks[x - 1][y][z].type == blockType::air)
+                            generateSide.push_back(blockPos::sideLeft);
+
+
+                        //TOP
+                        if (y == Chunk::MAX_HEIGHT - 1)
+                            generateSide.push_back(blockPos::top);
+                        else if (i.second.blocks[x][y + 1][z].type == blockType::air)
+                            generateSide.push_back(blockPos::top);
+
+                        //BOTTOM
+                        if (y != 0)
+                            if (i.second.blocks[x][y - 1][z].type == blockType::air)
+                                generateSide.push_back(blockPos::bottom);
+
+
+                        //BACK
+                        if (z == Chunk::CHUNK_SIZE - 1) {
+                            if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y + 1 }) == chunks.end())
+                            {
+                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y + 1 }].blocks[x][y][0].type == blockType::air)
+                                {
+                                    generateSide.push_back(blockPos::back);
+                                }
+                            }
+                            else
+                                generateSide.push_back(blockPos::back);
+                        }
+                        else if (i.second.blocks[x][y][z + 1].type == blockType::air)
+                            generateSide.push_back(blockPos::back);
+
+
+                        //FRONT
+                        if (z == 0) {
+                            if (i.second.position.y != 0)
+                            {
+                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y - 1 }].blocks[x][y][Chunk::CHUNK_SIZE - 1].type == blockType::air)
+                                {
+                                    generateSide.push_back(blockPos::front);
+                                }
+                            }
+                            else
+                                generateSide.push_back(blockPos::front);
+                        }
+                        else if (i.second.blocks[x][y][z - 1].type == blockType::air)
+                            generateSide.push_back(blockPos::front);
+
+
+
+
+                        //Building the blocks
+                        i.second.blocks[x][y][z].sideExclusion = generateSide;
+                        Cube generateBlock = i.second.blocks[x][y][z].buildCube();
+                        //generateBlock.LightSources.push_back(sun);
+                        //sceneMeshes.push_back(generateBlock.mesh);
+                    }
+                }
+            }
+            
+        }
+    }
+
+
+    lightShader.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
+    glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
+    shaderProgram.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
+
+
+    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
+    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), sun.lightPos.x, sun.lightPos.y, sun.lightPos.z);
+}
