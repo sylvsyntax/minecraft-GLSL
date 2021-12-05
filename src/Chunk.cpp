@@ -16,7 +16,6 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
             maxHeights.push_back(val * .1f * MAX_HEIGHT + MAX_HEIGHT / 2);
         }
     }
-    // [i * CHUNK_SIZE + j]
 
     for (int xx = 0; xx < CHUNK_SIZE; xx++)
     {

@@ -13,7 +13,6 @@
 // Setting up GLM for matrices in c++:
 // https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
 
-
 #include <Filesystem>
 #include "Mesh.h"
 #include "World.h"
@@ -51,7 +50,7 @@ int main()
     // Enables the depth test so faces drawn behind objects won't overlap.
     glEnable(GL_DEPTH_TEST);
 
-    Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+    Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 0.0f));
     
 
     World minecraft;
@@ -70,24 +69,7 @@ int main()
 
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
-        cout << "Total Chunks: " << minecraft.chunks.size() << "\nX: " <<(int) (camera.Position.x * 5.0f) << " Y: " << (int)(camera.Position.z * 5.0)<< "\n";
-        //minecraft.generateChunk((int)(camera.Position.x * 5.0f / 8.0f), (int)(camera.Position.z * 5.0f / 8.0f));
-        //ie++;
-        /*if (ie > 10000 && (int)(camera.Position.x / .2f) / Chunk::CHUNK_SIZE != curxChunk || (int)(camera.Position.z / .2f) / Chunk::CHUNK_SIZE != (curyChunk))
-        {
-            cout << "Total Chunks: " << minecraft.chunks.size() << "\n" << "Chunk{X: " << curxChunk << " Y : " << curyChunk << "}\nCamPos{X: " << (int)(camera.Position.x / .2f) << " Y : " << (int)(camera.Position.z / .2f) << "}\n\n";
-            curxChunk = (int) (camera.Position.x / .2f) / Chunk::CHUNK_SIZE;
-            curyChunk = (int) (camera.Position.z / .2f) / Chunk::CHUNK_SIZE;
-
-            minecraft.generateChunk(curxChunk, curyChunk);
-        }*/
-        
-        /*if (!generating && (curxChunk != (int)camera.Position.x / Chunk::CHUNK_SIZE || curyChunk != (int)camera.Position.z / Chunk::CHUNK_SIZE))
-        {
-            generating = true;
-            minecraft.generateChunk((int)camera.Position.x / Chunk::CHUNK_SIZE, (int)camera.Position.z / Chunk::CHUNK_SIZE);
-            generating = false;
-        }*/
+        cout << "Total Chunks: " << minecraft.chunks.size() << "\n\n";
 
         for (auto & i : minecraft.sceneMeshes)
         {
