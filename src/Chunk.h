@@ -14,7 +14,7 @@ public:
 	Block blocks[CHUNK_SIZE][MAX_HEIGHT][CHUNK_SIZE];
 	glm::ivec2 position;
 	
-	Chunk();
+	Chunk() = default;
 	Chunk(int x, int y);
 };
 

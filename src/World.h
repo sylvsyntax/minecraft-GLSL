@@ -40,7 +40,7 @@ struct hash<Vector2Key>
         // and bit shifting:
 
         return ((hash<int>()(k.x)
-            ^ (hash<int>()(k.y) << 1)) >> 1);
+            ^ (hash<int>()(k.y) << 1)));
     }
 };
 class World

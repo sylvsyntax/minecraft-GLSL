@@ -23,7 +23,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     // LightingCube ls(lightBlockPos);
     sceneLights.push_back(sun.mesh);
     
-    updateChunks();
+    //updateChunks();
     
 /*                      Enable when working with chunks
  --------------------------------------------------------------------------------
@@ -95,25 +95,44 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
             }
         }
     }*/
+    lightShader.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
+    glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
+    shaderProgram.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
 
+
+    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
+    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), sun.lightPos.x, sun.lightPos.y, sun.lightPos.z);
 
 
     // CHUNK GEN BABY
 
-
+    for (int i = -1; i < 2; i++)
+    {
+        for (int j = -1; j < 2; j++)
+        {
+            generateChunk(i, j);
+        }
+    }
+    updateChunks();
 }
 
 void World::generateChunk(int x, int y)
 {
+    // update chunks if position given hasnt been generated
+    if (chunks.find(Vector2Key{ x, y }) != chunks.end()) {
+        cout << "Found Chunk";
+        return;
+    }
     Chunk chunk(x, y);
     chunks[Vector2Key{ x, y }] = chunk;
-
-    updateChunks();
 
 }
 
 void World::updateChunks()
 {
+    sceneMeshes.clear();
     for (auto& i : chunks) {
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {
@@ -141,7 +160,7 @@ void World::updateChunks()
 
                         //LEFT SIDE
                         if (x == 0) {
-                            if (i.second.position.x != 0)
+                            if (chunks.find(Vector2Key{ i.second.position.x - 1, i.second.position.y }) != chunks.end())
                             {
                                 if (chunks[Vector2Key{ i.second.position.x - 1,i.second.position.y }].blocks[Chunk::CHUNK_SIZE - 1][y][z].type == blockType::air)
                                 {
@@ -185,7 +204,7 @@ void World::updateChunks()
 
                         //FRONT
                         if (z == 0) {
-                            if (i.second.position.y != 0)
+                            if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y - 1 }) != chunks.end())
                             {
                                 if (chunks[Vector2Key{ i.second.position.x,i.second.position.y - 1 }].blocks[x][y][Chunk::CHUNK_SIZE - 1].type == blockType::air)
                                 {
@@ -206,6 +225,7 @@ void World::updateChunks()
                         Cube generateBlock = i.second.blocks[x][y][z].buildCube();
                         //generateBlock.LightSources.push_back(sun);
                         sceneMeshes.push_back(generateBlock.mesh);
+                        
                     }
                 }
             }
@@ -213,7 +233,7 @@ void World::updateChunks()
         }
     }
 
-    lightShader.Activate();
+    /*lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
     shaderProgram.Activate();
@@ -221,5 +241,5 @@ void World::updateChunks()
 
 
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
-    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), sun.lightPos.x, sun.lightPos.y, sun.lightPos.z);
+    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), sun.lightPos.x, sun.lightPos.y, sun.lightPos.z);*/
 }

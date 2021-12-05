@@ -59,6 +59,7 @@ int main()
     int curxChunk = -1, curyChunk = -1;
 
     bool generating = false;
+    int ie = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -69,14 +70,25 @@ int main()
 
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
-        if (!generating && (curxChunk != camera.Position.x / Chunk::CHUNK_SIZE || curyChunk != camera.Position.z / Chunk::CHUNK_SIZE))
+        cout << "Total Chunks: " << minecraft.chunks.size() << "\nX: " <<(int) (camera.Position.x * 5.0f) << " Y: " << (int)(camera.Position.z * 5.0)<< "\n";
+        //minecraft.generateChunk((int)(camera.Position.x * 5.0f / 8.0f), (int)(camera.Position.z * 5.0f / 8.0f));
+        //ie++;
+        /*if (ie > 10000 && (int)(camera.Position.x / .2f) / Chunk::CHUNK_SIZE != curxChunk || (int)(camera.Position.z / .2f) / Chunk::CHUNK_SIZE != (curyChunk))
+        {
+            cout << "Total Chunks: " << minecraft.chunks.size() << "\n" << "Chunk{X: " << curxChunk << " Y : " << curyChunk << "}\nCamPos{X: " << (int)(camera.Position.x / .2f) << " Y : " << (int)(camera.Position.z / .2f) << "}\n\n";
+            curxChunk = (int) (camera.Position.x / .2f) / Chunk::CHUNK_SIZE;
+            curyChunk = (int) (camera.Position.z / .2f) / Chunk::CHUNK_SIZE;
+
+            minecraft.generateChunk(curxChunk, curyChunk);
+        }*/
+        
+        /*if (!generating && (curxChunk != (int)camera.Position.x / Chunk::CHUNK_SIZE || curyChunk != (int)camera.Position.z / Chunk::CHUNK_SIZE))
         {
             generating = true;
-            minecraft.generateChunk(camera.Position.x / Chunk::CHUNK_SIZE, camera.Position.z / Chunk::CHUNK_SIZE);
-            curxChunk = camera.Position.x / 8;
-            curyChunk = camera.Position.z / 8;
+            minecraft.generateChunk((int)camera.Position.x / Chunk::CHUNK_SIZE, (int)camera.Position.z / Chunk::CHUNK_SIZE);
             generating = false;
-        }
+        }*/
+
         for (auto & i : minecraft.sceneMeshes)
         {
             i.Draw(minecraft.shaderProgram, camera);

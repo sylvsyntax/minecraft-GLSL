@@ -2,7 +2,7 @@
 
 float perlin(float x, float y);
 
-Chunk::Chunk() : position(glm::ivec2(0,0)) {}
+//Chunk::Chunk() : position(glm::ivec2(-1000,-1000)) {}
 
 Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
 {
