@@ -10,6 +10,7 @@
 
 #include "Mesh.h"
 #include "shapes.h"
+#include "BlockEnums.h"
 
 class LightingCube
 {
@@ -31,9 +32,9 @@ class Cube
 public:
     Cube();
     Cube(glm::vec3 position);
-    Cube(int type, vec3 pos);
-    Cube(int type, vec3 pos, vector<int> sideExclusion);
-    int type;
+    Cube(blockType type, vec3 pos);
+    Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion);
+    blockType type;
     vector<LightingCube> LightSources;
     
     glm::vec3 position;

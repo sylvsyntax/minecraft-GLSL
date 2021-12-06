@@ -1,7 +1,6 @@
 #ifndef CHUNK_CLASS_H
 #define CHUNK_CLASS_H
 
-#include "Cube.h"
 #include "Block.h"
 
 class Chunk
@@ -13,8 +12,9 @@ public:
 	// 1D to 3D 
 	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
 	Block blocks[CHUNK_SIZE][MAX_HEIGHT][CHUNK_SIZE];
-	glm::vec2 position;
+	glm::ivec2 position;
 	
+	Chunk() = default;
 	Chunk(int x, int y);
 };
 

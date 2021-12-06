@@ -13,34 +13,33 @@ bool isEqual(int k, int i){
 
 Block::Block(){
     pos = vec3(0);
-    type = dirt;
-    sideExclusion.push_back(0);
-    sideExclusion.push_back(1);
-    sideExclusion.push_back(2);
-    sideExclusion.push_back(3);
-    sideExclusion.push_back(4);
-    sideExclusion.push_back(5);
+    type = blockType::dirt;
+    sideExclusion.push_back(blockPos::front);
+    sideExclusion.push_back(blockPos::bottom);
+    sideExclusion.push_back(blockPos::top);
+    sideExclusion.push_back(blockPos::back);
+    sideExclusion.push_back(blockPos::sideLeft);
+    sideExclusion.push_back(blockPos::sideRight);
 }
 
 Block::Block(vec3 pos, blockType type){
     this->pos = pos;
     this->type = type;
-    sideExclusion.push_back(0);
-    sideExclusion.push_back(1);
-    sideExclusion.push_back(2);
-    sideExclusion.push_back(3);
-    sideExclusion.push_back(4);
-    sideExclusion.push_back(5);
+    sideExclusion.push_back(blockPos::front);
+    sideExclusion.push_back(blockPos::bottom);
+    sideExclusion.push_back(blockPos::top);
+    sideExclusion.push_back(blockPos::back);
+    sideExclusion.push_back(blockPos::sideLeft);
+    sideExclusion.push_back(blockPos::sideRight);
 }
 
-Block::Block(vec3 pos, blockType type, vector<int> sideExclusion){
+Block::Block(vec3 pos, blockType type, vector<blockPos> sideExclusion){
     this->pos = pos;
     this->type = type;
     this->sideExclusion = sideExclusion;
 }
 
 Cube Block::buildCube (){
-    int n = type;
-    return Cube(n, pos, sideExclusion);
+    return Cube(type, pos, sideExclusion);
 }
 

@@ -13,7 +13,6 @@
 // Setting up GLM for matrices in c++:
 // https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
 
-
 #include <Filesystem>
 #include "Mesh.h"
 #include "World.h"
@@ -51,12 +50,15 @@ int main()
     // Enables the depth test so faces drawn behind objects won't overlap.
     glEnable(GL_DEPTH_TEST);
 
-    Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+    Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 0.0f));
     
 
     World minecraft;
     
+    int curxChunk = -1, curyChunk = -1;
 
+    bool generating = false;
+    int ie = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -67,6 +69,8 @@ int main()
 
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
+        cout << "Total Chunks: " << minecraft.chunks.size() << "\n\n";
+
         for (auto & i : minecraft.sceneMeshes)
         {
             i.Draw(minecraft.shaderProgram, camera);
