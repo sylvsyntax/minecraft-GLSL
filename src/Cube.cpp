@@ -406,79 +406,34 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
     cube[5] = nef;
     cube[5].removeConstructors();
 
-    vector<Vertex> cubeVertex(6);
+    vector<Vertex> cubeVertex(6 * sideExclusion.size());
     
     if(type == blockType::grass)
         defaultColor = glm::vec3(-0.5f, 2, -0.5f);
     else
         defaultColor = glm::vec3(1, 1, 1);
     
-    
-    
-    
-    Texture textures[]
-    {
-        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
-    };
-    
-    vector<GLuint> cubeInd;
-    for (int i = 0; i < 6; i++){
-        cubeInd.push_back(i);
-    }
-    
+    int v = 0;
     for(int i = 0; i < 6; i++){
         cube[i].scale(vec3(0.2));
         cube[i].translate(pos);
-        for(blockPos & f : sideExclusion)
+        for(blockPos f : sideExclusion)
             if((int)f == i){
-                
-                cubeVertex[0] = {regVecToGLM(cube[i].t1->pt1), defaultNormal, defaultColor, glm::vec2(1, 0)};
-                cubeVertex[1] = {regVecToGLM(cube[i].t1->pt2), defaultNormal, defaultColor, glm::vec2(1, 1)};
-                cubeVertex[2] = {regVecToGLM(cube[i].t1->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                cubeVertex[3] = {regVecToGLM(cube[i].t2->pt1), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                cubeVertex[4] = {regVecToGLM(cube[i].t2->pt2), defaultNormal, defaultColor, glm::vec2(0, 0)};
-                cubeVertex[5] = {regVecToGLM(cube[i].t2->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                
-                    vector<Texture> tex;
-                    if((type == blockType::grass) && (i != (int)blockPos::top) && (i != (int)blockPos::bottom))
-                        tex.push_back(textures[(int)type + 1]);
-                    else if ((type == blockType::grass) && (i == (int)blockPos::bottom))
-                        tex.push_back(textures[(int)type - 2]);
-                    else
-                        tex.push_back(textures[(int)type]);
-                    
-                    glm::vec3 cubePos = regVecToGLM(pos);
-                    glm::mat4 cubeModel = glm::mat4(1.0f);
-                    cubeModel = glm::translate(cubeModel, cubePos);
-                //Gotta change cubeVertex
-                Mesh block(cubeVertex, cubeInd, tex);
-                mesh = block;
-                
-                
-                shaderProgram.Activate();
-                glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
-                
-                for (auto & i : LightSources)
-                {
-                    glm::vec4 lightColor = i.lightColor;
-                    glm::vec3 lightPos = i.lightPos;
-                    glm::mat4 lightModel = i.lightModel;
-                    lightModel = glm::translate(lightModel, lightPos);
-                    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-                    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), pos.getx(), pos.gety(), pos.getz());
-                }
-                
-                tex.pop_back();
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 0] = {regVecToGLM(cube[i].t1->pt1), defaultNormal, defaultColor, glm::vec2(0, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 1] = {regVecToGLM(cube[i].t1->pt2), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 2] = {regVecToGLM(cube[i].t1->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 3] = {regVecToGLM(cube[i].t2->pt1), defaultNormal, defaultColor, glm::vec2(1, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 4] = {regVecToGLM(cube[i].t2->pt2), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 5] = {regVecToGLM(cube[i].t2->pt3), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                v++;
             }
-        
-        
     }
     
     
-    
+    vector<GLuint> cubeInd;
+    for (int i = 0; i < (36 * sideExclusion.size()); i++){
+        cubeInd.push_back(i);
+    }
     
     
     //In order to go about seperate images per face we can do this
@@ -490,6 +445,36 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
     //Each mesh will have 6 verteces and 6 vertexes
     //Possibly make a new class to handle this method?
     
+    
+    Texture textures[]
+    {
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+    };
     //vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
     //vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
+    vector<Texture> tex;
+    tex.push_back(textures[(int)type]);
+    
+    glm::vec3 cubePos = position;
+    glm::mat4 cubeModel = glm::mat4(1.0f);
+    cubeModel = glm::translate(cubeModel, cubePos);
+    
+    Mesh block(cubeVertex, cubeInd, tex);
+    mesh = block;
+    
+    shaderProgram.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+    
+    for (auto & i : LightSources)
+    {
+        glm::vec4 lightColor = i.lightColor;
+        glm::vec3 lightPos = i.lightPos;
+        glm::mat4 lightModel = i.lightModel;
+        lightModel = glm::translate(lightModel, lightPos);
+        glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), pos.getx(), pos.gety(), pos.getz());
+    }
 }
