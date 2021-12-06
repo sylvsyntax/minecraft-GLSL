@@ -43,3 +43,28 @@ Cube Block::buildCube (){
     return Cube(type, pos, sideExclusion);
 }
 
+
+vector<Cube> Block::buildCubes(){
+    vector<Cube> caughtCubes;
+    vector<blockPos> newExclusions;
+    
+    //          Only if the caught block is a grass block
+    
+    if(type == blockType::grass){
+        for(auto & i : sideExclusion){
+            if (i == blockPos::top)
+                caughtCubes.push_back(Cube(type, pos, {blockPos::top}));
+            else if (i == blockPos::bottom)
+                caughtCubes.push_back(Cube(blockType::dirt, pos, {blockPos::bottom}));
+            else
+                newExclusions.push_back(i);
+            if(newExclusions.size() != 0)
+                caughtCubes.push_back(Cube(blockType::sideGrass, pos, newExclusions));
+        }
+    }
+    else
+        caughtCubes.push_back(Cube (type, pos, sideExclusion));
+    
+    return caughtCubes;
+}
+

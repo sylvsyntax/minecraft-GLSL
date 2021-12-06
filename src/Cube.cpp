@@ -227,14 +227,12 @@ Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz
     //Essentially we rotate it 90 degrees backwards so it's facing inside
     //Than we flip the shape by switching the direction of the triangles
     nef.rotateY90();
-    nef.flip();
     cube[1] = nef;
     cube[1].removeConstructors();
 
     //We can then move the shape up
     //And flip it again
     nef.translate(vec3(0, 1, 0));
-    nef.flip();
     cube[2] = nef;
     cube[2].removeConstructors();
 
@@ -246,7 +244,6 @@ Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz
 
     //We translate the shape backwards and flip it so it makes the back wall
     nef.translate(vec3(0, 0, 1));
-    nef.flip();
     cube[3] = nef;
     cube[3].removeConstructors();
 
@@ -254,11 +251,9 @@ Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz
     //Repeating the steps back to normal so its facing
     //the original position
     nef.translate(vec3(0, 0, -1));
-    nef.flip();
 
     //Now we can rotate the shape sideways and flip it
     nef.rotateX90();
-    nef.flip();
     cube[4] = nef;
     cube[4].removeConstructors();
 
@@ -266,7 +261,6 @@ Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz
     //the propper position, and we flip it so it faces
     //the right direction
     nef.translate(vec3(1, 0, 0));
-    nef.flip();
     cube[5] = nef;
     cube[5].removeConstructors();
     
@@ -356,8 +350,10 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
 
     //Then we assign the triangles to the face that we will be manipulating
     face nef = face(&trg, &trg2);
+    nef.flip();
     cube[0] = nef;
     cube[0].removeConstructors();
+    nef.flip();
 
     //This makes the bottom of the box
     //Essentially we rotate it 90 degrees backwards so it's facing inside
@@ -371,6 +367,7 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
     //And flip it again
     nef.translate(vec3(0, 1, 0));
     nef.flip();
+    nef.rotateVerts();
     cube[2] = nef;
     cube[2].removeConstructors();
 
@@ -402,7 +399,6 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
     //the propper position, and we flip it so it faces
     //the right direction
     nef.translate(vec3(1, 0, 0));
-    nef.flip();
     cube[5] = nef;
     cube[5].removeConstructors();
 

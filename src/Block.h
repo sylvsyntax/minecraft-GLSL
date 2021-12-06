@@ -10,6 +10,7 @@
 #define BLOCK_CLASS_H
 
 #include "Cube.h"
+#include "vector"
 
 class Block
 {
@@ -23,6 +24,7 @@ public:
     vector<blockPos> sideExclusion;
     vec3 pos;
     Cube buildCube();
+    vector<Cube> buildCubes();
     blockType type;
     
     Cube buildBlock();

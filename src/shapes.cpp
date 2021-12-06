@@ -93,6 +93,13 @@ void triangle::rotateAcrossAxis(char axis) {
     }
 }
 
+void triangle::rotateVerts(){
+    vec3 temp = pt1;
+    pt1 = pt3;
+    pt3 = pt2;
+    pt2 = temp;
+}
+
 //These allow us to set points with vectors as input variables
 void triangle::setPt1(vec3 newpt) {
     pt1 = newpt;
@@ -186,6 +193,21 @@ void face::rotateX90() {
 void face::flip() {
     t1->rotateAcrossAxis('b');
     t2->rotateAcrossAxis('b');
+}
+
+void face::rotateVerts(){
+    t1->rotateVerts();
+    t2->rotateVerts();
+}
+
+void face::rotateFace(){
+    vec3 temp = t1->pt1;
+    t1->pt1 = t2->pt3;
+    t2->pt2 = t2->pt3;
+    t2->pt3 = t2->pt1;
+    t2->pt1 = t1->pt3;
+    t1->pt2 = t1->pt3;
+    t1->pt3 = temp;
 }
 
 //This allows us to translate every

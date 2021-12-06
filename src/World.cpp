@@ -95,6 +95,8 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
             }
         }
     }*/
+    
+    
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
@@ -108,14 +110,19 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
 
-    for (int i = -1; i < 2; i++)
+    for (int i = -3; i < 3; i++)
     {
-        for (int j = -1; j < 2; j++)
+        for (int j = -3; j < 3; j++)
         {
             generateChunk(i, j);
         }
     }
     updateChunks();
+    
+    Block grass(vec3(0, -1, 0), blockType::grass);
+    for(auto & i : grass.buildCubes()){
+        sceneMeshes.push_back(i.mesh);
+    }
 }
 
 void World::generateChunk(int x, int y)
@@ -222,9 +229,9 @@ void World::updateChunks()
 
                         //Building the blocks
                         i.second.blocks[x][y][z].sideExclusion = generateSide;
-                        Cube generateBlock = i.second.blocks[x][y][z].buildCube();
-                        //generateBlock.LightSources.push_back(sun);
-                        sceneMeshes.push_back(generateBlock.mesh);
+                        for(auto & i : i.second.blocks[x][y][z].buildCubes()){
+                            sceneMeshes.push_back(i.mesh);
+                        }
                         
                     }
                 }

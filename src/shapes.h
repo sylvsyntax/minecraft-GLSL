@@ -69,6 +69,7 @@ public:
     triangle();
 
     void rotateAcrossAxis(char axis);
+    void rotateVerts();
 
     //These allow us to set points with vectors as input variables
     void setPt1(vec3 newpt);
@@ -110,6 +111,9 @@ public:
 
     //Flips the shapes entirely, both triangles have their own methods.
     void flip();
+    
+    void rotateVerts();
+    void rotateFace();
 
     //This allows us to translate every
     //point of a shape by a vector 3.
