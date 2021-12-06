@@ -31,10 +31,10 @@ public:
         blockArray.push_back(Block(vec3(0,0.8,0) + pos, blockType::wood, sideExclus));
         int startingPt = -2;
         for(int i = 0; i < 3; i++){
-            //startingPt++;
-            for(int v = -2; v < 2; v++)
-                for(int z = startingPt; z < abs(startingPt); z++)
+            for(int v = startingPt; v <= abs(startingPt); v++)
+                for(int z = startingPt; z <= abs(startingPt); z++)
                     blockArray.push_back(Block(vec3(v * 0.2, 1 + (i * 0.2), z * 0.2) + pos, blockType::leaves));
+            startingPt++;
         }
     }
     vector<Block> blockArray;
