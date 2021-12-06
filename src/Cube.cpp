@@ -463,12 +463,22 @@ Cube::Cube(int type, vec3 pos, vector<int> sideExclusion) : position(pos.getx(),
     }
     
     
+    //In order to go about seperate images per face we can do this
+    
+    //Seperate each face into it's own mesh
+    //Apply textures seperately
+    //Make it work with the exclusion method
+    
+    //Each mesh will have 6 verteces and 6 vertexes
+    //Possibly make a new class to handle this method?
+    
     
     Texture textures[]
     {
         Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
     vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));
