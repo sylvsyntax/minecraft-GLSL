@@ -12,6 +12,7 @@
 #include "Cube.h"
 #include "Chunk.h"
 #include "Block.h"
+#include "Structures.h"
 
 World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"), lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"), sun(glm::vec3(0.0f,0.0f,0.0f)) {
     
@@ -63,10 +64,10 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     //======================
     //  Default Block
     //======================
-    Block grassBlock2 = Block(vec3(-1, 1, 0), grass);       //By default, without including the faces
-    Cube gbCube2 = grassBlock2.buildCube();                 //We build every face
-    gbCube2.LightSources.push_back(sun);
-    sceneMeshes.push_back(gbCube2.mesh);
+     Block grass(vec3(0, -1, 0), blockType::grass); //Create the block and store it's information
+     for(auto & i : grass.buildCubes()){            //Build the cubes and store them to an array
+         sceneMeshes.push_back(i.mesh);             //Push each cube to the mesh
+     }                                              //Each cube has an individual texture for each side of the object
     
     */
     
@@ -110,19 +111,30 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
 
-    for (int i = -3; i < 3; i++)
+    for (int i = -1; i < 2; i++)
     {
-        for (int j = -3; j < 3; j++)
+        for (int j = -1; j < 2; j++)
         {
             generateChunk(i, j);
         }
     }
     updateChunks();
     
+    
+    
+    
+    
+    //Build default grass Block
+    
     Block grass(vec3(0, -1, 0), blockType::grass);
     for(auto & i : grass.buildCubes()){
         sceneMeshes.push_back(i.mesh);
     }
+    
+    
+    
+    
+    
 }
 
 void World::generateChunk(int x, int y)
@@ -232,12 +244,16 @@ void World::updateChunks()
                         for(auto & i : i.second.blocks[x][y][z].buildCubes()){
                             sceneMeshes.push_back(i.mesh);
                         }
-                        
                     }
                 }
             }
+            for(auto & i : Structures(Tree, i.second.getTop(3, 4)).BuildStruct()){
+                sceneMeshes.push_back(i);
+            }
+            ;
 
         }
+        
     }
 
     /*lightShader.Activate();

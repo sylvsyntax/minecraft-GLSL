@@ -41,6 +41,9 @@ public:
     void setPts(vec3 pt);
     void addPt(vec3 pt);
     void scalePt(vec3 pt);
+    
+    vec3 operator + (const vec3& param);
+    vec3 operator - (const vec3& param);
 
 private:
     float x;

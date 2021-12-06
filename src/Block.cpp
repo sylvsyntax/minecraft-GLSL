@@ -62,6 +62,18 @@ vector<Cube> Block::buildCubes(){
                 caughtCubes.push_back(Cube(blockType::sideGrass, pos, newExclusions));
         }
     }
+    else if(type == blockType::wood){
+        for(auto & i : sideExclusion){
+            if (i == blockPos::top)
+                caughtCubes.push_back(Cube(blockType::woodEnd, pos, {blockPos::top}));
+            else if (i == blockPos::bottom)
+                caughtCubes.push_back(Cube(blockType::woodEnd, pos, {blockPos::bottom}));
+            else
+                newExclusions.push_back(i);
+            if(newExclusions.size() != 0)
+                caughtCubes.push_back(Cube(blockType::wood, pos, newExclusions));
+        }
+    }
     else
         caughtCubes.push_back(Cube (type, pos, sideExclusion));
     

@@ -2,6 +2,7 @@
 #define CHUNK_CLASS_H
 
 #include "Block.h"
+#include "Mesh.h"
 
 class Chunk
 {
@@ -16,6 +17,7 @@ public:
 	
 	Chunk() = default;
 	Chunk(int x, int y);
+    vec3 getTop(int x, int y);
 };
 
 #endif

@@ -4,6 +4,15 @@ float perlin(float x, float y);
 
 //Chunk::Chunk() : position(glm::ivec2(-1000,-1000)) {}
 
+
+vec3 Chunk::getTop(int x, int y){
+    vec3 pos;
+    for(int i = 0; i < MAX_HEIGHT; i++)
+        if(blocks[x][i][y].type == blockType::grass)
+            pos = vec3(blocks[x][i][y].pos.getx(), blocks[x][i][y].pos.gety(), blocks[x][i][y].pos.getz());
+    return pos;
+}
+
 Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
 {
     position = glm::vec2(x, y);

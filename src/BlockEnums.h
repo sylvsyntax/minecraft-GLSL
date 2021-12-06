@@ -2,7 +2,7 @@
 #define BLOCK_ENUMS_H
 
 enum class blockType {
-    air = -1, dirt = 0, stone = 1, grass = 2, sideGrass = 3
+    air = -1, dirt = 0, stone = 1, grass = 2, sideGrass = 3, wood = 4, woodEnd = 5, leaves = 6
 };
 
 enum class blockPos {

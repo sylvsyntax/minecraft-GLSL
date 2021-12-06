@@ -447,7 +447,10 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
         Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/wood_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/wood_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     //vector<Vertex> cubeVerts(cubeVertex, cubeVertex + sizeof(cubeVertex) / sizeof(Vertex));
     //vector<GLuint> cubeIndices(cubeInd, cubeInd + sizeof(cubeInd) / sizeof(GLuint));

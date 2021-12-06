@@ -23,6 +23,16 @@ vec3::vec3(float zed) {
     this->z = zed;
 }
 
+vec3 vec3::operator + (const vec3& param){
+    vec3 temp(this->getx() + param.x, this->gety() + param.y, this->getz() + param.z);
+    return temp;
+}
+
+vec3 vec3::operator - (const vec3& param){
+    vec3 temp(this->getx() - param.x, this->gety() - param.y, this->getz() - param.z);
+    return temp;
+}
+
 void vec3::setPts(vec3 pt) {
     x = pt.getx();
     y = pt.gety();
