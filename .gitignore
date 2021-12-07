@@ -2,8 +2,6 @@
 **
 !.git/
 !.gitignore
-!.gitattributes
-!src/
 
 !*.md
 
@@ -17,4 +15,3 @@
 !*.png
 
 .DS_Store
-*.xcodeprojec
