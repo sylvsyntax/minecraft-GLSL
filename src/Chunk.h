@@ -12,7 +12,7 @@ public:
 	// https://stackoverflow.com/a/7367817
 	// 1D to 3D 
 	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
-	Block blocks[CHUNK_SIZE][MAX_HEIGHT][CHUNK_SIZE];
+	int blocks[CHUNK_SIZE][MAX_HEIGHT][CHUNK_SIZE];
 	glm::ivec2 position;
 	
 	Chunk() = default;

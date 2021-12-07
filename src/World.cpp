@@ -159,13 +159,13 @@ void World::updateChunks()
             {
                 for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
                 {
-                    if (i.second.blocks[x][y][z].type != blockType::air) {
+                    if (i.second.blocks[x][y][z] != (int)blockType::air) {
                         vector<blockPos> generateSide;
                         //RIGHT SIDE
                         if (x == Chunk::CHUNK_SIZE - 1) {
                             if (chunks.find(Vector2Key{ i.second.position.x + 1, i.second.position.y }) != chunks.end())
                             {
-                                if (chunks[Vector2Key{ i.second.position.x + 1,i.second.position.y }].blocks[0][y][z].type == blockType::air)
+                                if (chunks[Vector2Key{ i.second.position.x + 1,i.second.position.y }].blocks[0][y][z] == (int)blockType::air)
                                 {
                                     generateSide.push_back(blockPos::sideRight);
                                 }
@@ -173,7 +173,7 @@ void World::updateChunks()
                             else
                                 generateSide.push_back(blockPos::sideRight);
                         }
-                        else if (i.second.blocks[x + 1][y][z].type == blockType::air)
+                        else if (i.second.blocks[x + 1][y][z] == (int)blockType::air)
                             generateSide.push_back(blockPos::sideRight);
 
 
@@ -181,7 +181,7 @@ void World::updateChunks()
                         if (x == 0) {
                             if (chunks.find(Vector2Key{ i.second.position.x - 1, i.second.position.y }) != chunks.end())
                             {
-                                if (chunks[Vector2Key{ i.second.position.x - 1,i.second.position.y }].blocks[Chunk::CHUNK_SIZE - 1][y][z].type == blockType::air)
+                                if (chunks[Vector2Key{ i.second.position.x - 1,i.second.position.y }].blocks[Chunk::CHUNK_SIZE - 1][y][z] == (int)blockType::air)
                                 {
                                     generateSide.push_back(blockPos::sideLeft);
                                 }
@@ -189,19 +189,19 @@ void World::updateChunks()
                             else
                                 generateSide.push_back(blockPos::sideLeft);
                         }
-                        else if (i.second.blocks[x - 1][y][z].type == blockType::air)
+                        else if (i.second.blocks[x - 1][y][z] == (int)blockType::air)
                             generateSide.push_back(blockPos::sideLeft);
 
 
                         //TOP
                         if (y == Chunk::MAX_HEIGHT - 1)
                             generateSide.push_back(blockPos::top);
-                        else if (i.second.blocks[x][y + 1][z].type == blockType::air)
+                        else if (i.second.blocks[x][y + 1][z] == (int)blockType::air)
                             generateSide.push_back(blockPos::top);
 
                         //BOTTOM
                         if (y != 0)
-                            if (i.second.blocks[x][y - 1][z].type == blockType::air)
+                            if (i.second.blocks[x][y - 1][z] == (int)blockType::air)
                                 generateSide.push_back(blockPos::bottom);
 
 
@@ -209,7 +209,7 @@ void World::updateChunks()
                         if (z == Chunk::CHUNK_SIZE - 1) {
                             if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y + 1 }) != chunks.end())
                             {
-                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y + 1 }].blocks[x][y][0].type == blockType::air)
+                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y + 1 }].blocks[x][y][0]== (int)blockType::air)
                                 {
                                     generateSide.push_back(blockPos::back);
                                 }
@@ -217,7 +217,7 @@ void World::updateChunks()
                             else
                                 generateSide.push_back(blockPos::back);
                         }
-                        else if (i.second.blocks[x][y][z + 1].type == blockType::air)
+                        else if (i.second.blocks[x][y][z + 1] == (int)blockType::air)
                             generateSide.push_back(blockPos::back);
 
 
@@ -225,7 +225,7 @@ void World::updateChunks()
                         if (z == 0) {
                             if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y - 1 }) != chunks.end())
                             {
-                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y - 1 }].blocks[x][y][Chunk::CHUNK_SIZE - 1].type == blockType::air)
+                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y - 1 }].blocks[x][y][Chunk::CHUNK_SIZE - 1] == (int)blockType::air)
                                 {
                                     generateSide.push_back(blockPos::front);
                                 }
@@ -233,16 +233,18 @@ void World::updateChunks()
                             else
                                 generateSide.push_back(blockPos::front);
                         }
-                        else if (i.second.blocks[x][y][z - 1].type == blockType::air)
+                        else if (i.second.blocks[x][y][z - 1] == (int)blockType::air)
                             generateSide.push_back(blockPos::front);
-
-
-
-
-                        //Building the blocks
-                        i.second.blocks[x][y][z].sideExclusion = generateSide;
-                        for(auto & i : i.second.blocks[x][y][z].buildCubes()){
-                            sceneMeshes.push_back(i.mesh);
+                        
+                        if(generateSide.size() != 0)
+                        {
+                            Block generateBlock(vec3(i.second.position.x * (8 * .2) + (x * 0.2), (y * 0.2), i.second.position.y * (8 * .2) + (z * 0.2)), blockType(i.second.blocks[x][y][z]), generateSide);
+                            
+                            
+                            //Building the blocks
+                            for(auto & i : generateBlock.buildCubes()){
+                                sceneMeshes.push_back(i.mesh);
+                            }
                         }
                     }
                 }

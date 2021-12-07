@@ -8,8 +8,8 @@ float perlin(float x, float y);
 vec3 Chunk::getTop(int x, int y){
     vec3 pos;
     for(int i = 0; i < MAX_HEIGHT; i++)
-        if(blocks[x][i][y].type == blockType::grass)
-            pos = vec3(blocks[x][i][y].pos.getx(), blocks[x][i][y].pos.gety(), blocks[x][i][y].pos.getz());
+        if(blocks[x][i][y] == (int)blockType::grass)
+            pos = vec3(position.x * (8 * 0.2) + (x * 0.2), i * 0.2, position.y * (8 * 0.2) + (y * 0.2));
     return pos;
 }
 
@@ -44,7 +44,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
                 //Moves over the position
                 Block newBlock(newPos, BlockType);
                 newBlock.type = BlockType;
-                blocks[xx][yy][zz] = newBlock;
+                blocks[xx][yy][zz] = (int)newBlock.type;
             }
         }
     }
