@@ -111,9 +111,9 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
 
-    for (int i = -1; i < 2; i++)
+    for (int i = -1; i <= 1; i++)
     {
-        for (int j = -1; j < 2; j++)
+        for (int j = -1; j <= 1; j++)
         {
             generateChunk(i, j);
         }
@@ -123,13 +123,6 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
     
     
     
-    
-    //Build default grass Block
-    
-    Block grass(vec3(0, -1, 0), blockType::grass);
-    for(auto & i : grass.buildCubes()){
-        sceneMeshes.push_back(i.mesh);
-    }
     
     
     
@@ -146,12 +139,25 @@ void World::generateChunk(int x, int y)
     }
     Chunk chunk(x, y);
     chunks[Vector2Key{ x, y }] = chunk;
+    //Build default grass Block
+    
 
 }
-
+bool generatedBlock;
+void World::updateSpecial(){
+    Block grass(vec3(0, worldTime / 10, 0), blockType::grass);
+    for(auto & i : grass.buildCubes()){
+        sceneMeshes.pop_back();
+    }
+    for(auto & i : grass.buildCubes()){
+        sceneMeshes.push_back(i.mesh);
+    }
+    cout << "Time: " << worldTime << endl;
+}
 void World::updateChunks()
 {
     sceneMeshes.clear();
+    
     for (auto& i : chunks) {
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {

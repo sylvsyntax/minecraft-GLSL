@@ -59,6 +59,9 @@ int main()
 
     bool generating = false;
     int ie = 0;
+    
+    double prevTime = glfwGetTime();
+    
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -66,7 +69,12 @@ int main()
 		// Clean the back buffer and assign the new color to it
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        double curTime = glfwGetTime();
+        if(curTime - prevTime >= 1/60){
+            minecraft.worldTime = curTime;
+            prevTime = curTime;
+        }
+        //minecraft.updateSpecial();
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
         cout << "Total Chunks: " << minecraft.chunks.size() << "\n\n";

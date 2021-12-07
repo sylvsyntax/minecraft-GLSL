@@ -98,7 +98,7 @@ public:
     face(vec3 pt1, vec3 pt2, vec3 pt3, vec3 pt4);
     //Make a face with 6 points (counter clockwise)
     face(vec3 pt1, vec3 pt2, vec3 pt3, vec3 pt4, vec3 pt5, vec3 pt6);
-
+    ~face();
     triangle* t1;
     triangle* t2;
 

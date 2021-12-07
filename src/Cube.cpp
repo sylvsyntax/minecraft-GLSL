@@ -425,22 +425,16 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
             }
     }
     
-    
+    for(int i = 0; i < 6; i++){
+        cube[i].t1 = nullptr;
+        delete(cube[i].t1);
+        cube[i].t2 = nullptr;
+        delete(cube[i].t2);
+    }
     vector<GLuint> cubeInd;
     for (int i = 0; i < (36 * sideExclusion.size()); i++){
         cubeInd.push_back(i);
     }
-    
-    
-    //In order to go about seperate images per face we can do this
-    
-    //Seperate each face into it's own mesh
-    //Apply textures seperately
-    //Make it work with the exclusion method
-    
-    //Each mesh will have 6 verteces and 6 vertexes
-    //Possibly make a new class to handle this method?
-    
     
     Texture textures[]
     {
