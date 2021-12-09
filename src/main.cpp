@@ -20,6 +20,8 @@
 
 const GLint WIDTH = 1280, HEIGHT = 720;
 
+
+
 int main()
 {
     glfwInit();

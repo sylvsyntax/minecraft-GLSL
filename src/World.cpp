@@ -9,10 +9,6 @@
 #include <math.h>
 #include <filesystem>
 #include "World.h"
-#include "Cube.h"
-#include "Chunk.h"
-#include "Block.h"
-#include "Structures.h"
 
 World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.frag"), lightShader("src/Shaders/light.vert", "src/Shaders/light.frag"), sun(glm::vec3(0.0f,0.0f,0.0f)) {
     
@@ -111,7 +107,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
     int t = 0;
-    int genSize = 2;
+    int genSize = 1;
     for (int i = -genSize; i <= genSize; i++)
     {
         for (int j = -genSize; j <= genSize; j++)
@@ -121,8 +117,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
             generateChunk(i, j);
         }
     }
-    //generateChunk(0, 0);
-    //updateChunks();
+    updateChunks();
     
     
     
@@ -163,7 +158,11 @@ void World::updateSpecial(){
 void World::updateChunks()
 {
     vector<vector<Block>> blocks(numOfBlocktypes);
+    for(auto& i : blocks){
+        i.reserve(32000);
+    }
     sceneMeshes.clear();
+    vector<blockPos> generateSide;
     
     for (auto& i : chunks) {
         
@@ -174,7 +173,6 @@ void World::updateChunks()
                 for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
                 {
                     if (i.second.blocks[x][y][z] != (int)blockType::air) {
-                        vector<blockPos> generateSide;
                         //RIGHT SIDE
                         if (x == Chunk::CHUNK_SIZE - 1) {
                             if (chunks.find(Vector2Key{ i.second.position.x + 1, i.second.position.y }) != chunks.end())
@@ -258,7 +256,7 @@ void World::updateChunks()
                             
                             //The block gets made
                             Block generateBlock(vec3(i.second.position.x * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (x * BLOCK_SIZE), (y * BLOCK_SIZE), i.second.position.y * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (z * BLOCK_SIZE)), blockType(i.second.blocks[x][y][z]), generateSide);
-                            
+                            generateSide.clear();
                             
                             //Build each individual block and assign it to blocks
                             for(auto & z : generateBlock.buildBlocks()){
@@ -304,13 +302,12 @@ void World::updateChunks()
                 cubeModel = glm::translate(cubeModel, cubePos);
                 
                 Mesh set(cubeVertex, cubeInd, tex);
-                //if(z != 2)        //Removes the faces that use grass
+                if(z != 2)        //Removes the faces that use grass
                     sceneMeshes.push_back(set);
                 j.clear();
             }
             z++;
         }
-        
     }
 
     /*lightShader.Activate();

@@ -6,6 +6,7 @@
 
 #include <glad/glad.h>
 #include <stb/stb_image.h>
+#include <map>
 
 #include "shaderClass.h"
 
@@ -19,7 +20,7 @@ public:
 	Texture(const char* image, const char* texType, GLuint slot, GLenum format, GLenum pixelType);
 
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);
-
+    static map<const char*, GLuint> idMap;
 	void Bind();
 	void Unbind();
 	void Delete();

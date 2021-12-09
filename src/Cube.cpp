@@ -521,9 +521,9 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
     }
     
     for(int i = 0; i < 6; i++){
-        cube[i].t1 = nullptr;
+        cube[i].t1 = NULL;
         delete(cube[i].t1);
-        cube[i].t2 = nullptr;
+        cube[i].t2 = NULL;
         delete(cube[i].t2);
     }
     vector<GLuint> cubeInd;

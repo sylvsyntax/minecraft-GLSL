@@ -1,6 +1,5 @@
 #include "Chunk.h"
 #include "Structures.h"
-#include "PerlinNoise.cpp"
 
 float perlin(float x, float y);
 
