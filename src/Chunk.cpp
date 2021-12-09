@@ -1,4 +1,5 @@
 #include "Chunk.h"
+#include "PerlinNoise.cpp"
 
 float perlin(float x, float y);
 
@@ -13,6 +14,14 @@ vec3 Chunk::getTop(int x, int y){
     return pos;
 }
 
+vec3 Chunk::getLocalTop(int x, int y){
+    vec3 pos;
+    for(int i = 0; i < MAX_HEIGHT; i++)
+        if(blocks[x][i][y] == (int)blockType::grass)
+            pos = vec3(x, i, y);
+    return pos;
+}
+
 Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
 {
     PerlinNoise perlinNoise(80085);
@@ -24,7 +33,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
         {
             //float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
             float val = perlinNoise.noise(((double)i / (double)CHUNK_SIZE + x), ((double)j / (double)CHUNK_SIZE + y), 0.5);
-            maxHeights.push_back(val * 15.0/*CHANGE LEFT TO WHATEVER*/ + MAX_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
+            maxHeights.push_back(val * 7.0/*CHANGE LEFT TO WHATEVER*/ + MAX_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
         }
     }
 
@@ -37,7 +46,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
                 blockType BlockType = blockType::dirt;
                 if (yy == (int)round(maxHeights[xx * CHUNK_SIZE + zz]))
                     BlockType = blockType::grass;
-                else if (yy < .5f * maxHeights[xx * CHUNK_SIZE + zz])
+                else if (yy < maxHeights[xx * CHUNK_SIZE + zz] - 4)
                     BlockType = blockType::stone;
                 else if (yy > (int)round(maxHeights[xx * CHUNK_SIZE + zz]))
                     BlockType = blockType::air;

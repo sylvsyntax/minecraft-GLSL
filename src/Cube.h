@@ -36,6 +36,7 @@ public:
     Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion);
     blockType type;
     vector<LightingCube> LightSources;
+    vector<Vertex> getVertexSet(vec3 pos, vector<blockPos> sideExclusion);
     
     glm::vec3 position;
     Shader shaderProgram;

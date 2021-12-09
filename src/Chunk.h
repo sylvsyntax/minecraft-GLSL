@@ -9,7 +9,7 @@ class Chunk
 {
 public:
 	static const int CHUNK_SIZE = 8;
-	static const int MAX_HEIGHT = 25;
+	static const int MAX_HEIGHT = 30;
 	// https://stackoverflow.com/a/7367817
 	// 1D to 3D 
 	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
@@ -19,6 +19,7 @@ public:
 	Chunk() = default;
 	Chunk(int x, int y);
     vec3 getTop(int x, int y);
+    vec3 getLocalTop(int x, int y);
 };
 
 #endif

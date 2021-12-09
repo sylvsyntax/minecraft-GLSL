@@ -111,9 +111,9 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
 
-    for (int i = -1; i <= 1; i++)
+    for (int i = -2; i <= 2; i++)
     {
-        for (int j = -1; j <= 1; j++)
+        for (int j = -2; j <= 2; j++)
         {
             generateChunk(i, j);
         }
@@ -154,11 +154,15 @@ void World::updateSpecial(){
     }
     cout << "Time: " << worldTime << endl;
 }
+
+
 void World::updateChunks()
 {
+    vector<vector<Block>> blocks(numOfBlocktypes);
     sceneMeshes.clear();
     
     for (auto& i : chunks) {
+        
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {
             for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
@@ -244,22 +248,63 @@ void World::updateChunks()
                         
                         if(generateSide.size() != 0)
                         {
+                            //Switch to batch rendering
+                            
+                            
+                            
+                            //The block gets made
                             Block generateBlock(vec3(i.second.position.x * (8 * .2) + (x * 0.2), (y * 0.2), i.second.position.y * (8 * .2) + (z * 0.2)), blockType(i.second.blocks[x][y][z]), generateSide);
                             
                             
-                            //Building the blocks
-                            for(auto & i : generateBlock.buildCubes()){
-                                sceneMeshes.push_back(i.mesh);
+                            //Build each individual block and assign it to blocks
+                            for(auto & z : generateBlock.buildBlocks()){
+                                blocks[(int)z.type].push_back(z);
                             }
                         }
                     }
                 }
             }
-            for(auto & i : Structures(Tree, i.second.getTop(3, 4)).BuildStruct()){
-                sceneMeshes.push_back(i);
+        }
+        
+        
+        Texture textures[]
+        {
+            Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/wood_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/wood_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        };
+        int z = 0;
+        for(auto & j : blocks){ //Per vector
+            vector<Vertex> cubeVertex;
+            if(j.size())
+            for (auto & f : j) //Per block
+                for (auto & j : f.buildCube().getVertexSet(f.pos, f.sideExclusion))
+                    cubeVertex.push_back(j);
+            
+            
+            vector<GLuint> cubeInd;
+            for (int p = 0; p < cubeVertex.size(); p++){
+                cubeInd.push_back(p);
             }
-            ;
-
+            if(cubeInd.size() != 0){
+                vector<Texture> tex;
+                cout << (int)j[z].type;
+                tex.push_back(textures[(int)j[z].type]);
+                
+                glm::vec3 cubePos = glm::vec3(i.second.position.x * 8 * 0.2, 0, i.second.position.y * 8 * 0.2);
+                glm::mat4 cubeModel = glm::mat4(1.0f);
+                cubeModel = glm::translate(cubeModel, cubePos);
+                
+                Mesh set(cubeVertex, cubeInd, tex);
+                //if(z != 2)        //Removes the faces that use grass
+                    sceneMeshes.push_back(set);
+                j.clear();
+            }
+            z++;
         }
         
     }

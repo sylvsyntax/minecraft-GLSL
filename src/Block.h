@@ -25,6 +25,7 @@ public:
     vec3 pos;
     Cube buildCube();
     vector<Cube> buildCubes();
+    vector<Block> buildBlocks();
     blockType type;
     
     Cube buildBlock();

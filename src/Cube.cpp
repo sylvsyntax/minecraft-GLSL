@@ -329,6 +329,101 @@ Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz
     }
 }
 
+vector<Vertex> Cube::getVertexSet(vec3 pos, vector<blockPos> sideExclusion){
+    glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    
+    
+    face cube[6];
+    vec3 defaultpt1 = vec3(0, 1, 0);
+    vec3 defaultpt2 = vec3(1, 0, 0);
+    vec3 defaultpt3 = vec3(0);
+
+    //And these are the default triangles used for nef. The singular face we will manipulate to build this box.
+    triangle trg = triangle(defaultpt1, defaultpt2, defaultpt3);
+    triangle trg2 = triangle(defaultpt1, defaultpt2, defaultpt3);
+    //The rotation is done to complete the face.
+    trg2.rotateAcrossAxis('x');
+
+    //Then we assign the triangles to the face that we will be manipulating
+    face nef = face(&trg, &trg2);
+    nef.flip();
+    cube[0] = nef;
+    cube[0].removeConstructors();
+    nef.flip();
+
+    //This makes the bottom of the box
+    //Essentially we rotate it 90 degrees backwards so it's facing inside
+    //Than we flip the shape by switching the direction of the triangles
+    nef.rotateY90();
+    nef.flip();
+    cube[1] = nef;
+    cube[1].removeConstructors();
+
+    //We can then move the shape up
+    //And flip it again
+    nef.translate(vec3(0, 1, 0));
+    nef.flip();
+    nef.rotateVerts();
+    cube[2] = nef;
+    cube[2].removeConstructors();
+
+    //Now we reset to the default position and flip
+    //the triangles again
+    trg = triangle(defaultpt1, defaultpt2, defaultpt3);
+    trg2 = triangle(defaultpt1, defaultpt2, defaultpt3);
+    trg2.rotateAcrossAxis('x');
+
+    //We translate the shape backwards and flip it so it makes the back wall
+    nef.translate(vec3(0, 0, 1));
+    nef.flip();
+    cube[3] = nef;
+    cube[3].removeConstructors();
+
+    //Than we move the shape the opposite direction
+    //Repeating the steps back to normal so its facing
+    //the original position
+    nef.translate(vec3(0, 0, -1));
+    nef.flip();
+
+    //Now we can rotate the shape sideways and flip it
+    nef.rotateX90();
+    nef.flip();
+    cube[4] = nef;
+    cube[4].removeConstructors();
+
+    //Than we translate it by the x value so it can be in
+    //the propper position, and we flip it so it faces
+    //the right direction
+    nef.translate(vec3(1, 0, 0));
+    cube[5] = nef;
+    cube[5].removeConstructors();
+
+    vector<Vertex> cubeVertex(6 * sideExclusion.size());
+    
+    if(type == blockType::grass)
+        defaultColor = glm::vec3(-0.5f, 2, -0.5f);
+    else
+        defaultColor = glm::vec3(1, 1, 1);
+    
+    int v = 0;
+    for(int i = 0; i < 6; i++){
+        cube[i].scale(vec3(0.2));
+        cube[i].translate(pos);
+        for(blockPos f : sideExclusion)
+            if((int)f == i){
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 0] = {regVecToGLM(cube[i].t1->pt1), defaultNormal, defaultColor, glm::vec2(0, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 1] = {regVecToGLM(cube[i].t1->pt2), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 2] = {regVecToGLM(cube[i].t1->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 3] = {regVecToGLM(cube[i].t2->pt1), defaultNormal, defaultColor, glm::vec2(1, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 4] = {regVecToGLM(cube[i].t2->pt2), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 5] = {regVecToGLM(cube[i].t2->pt3), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                v++;
+            }
+    }
+    return cubeVertex;
+}
+
 //Front, Bottom, Top, Back, Left, Right
 Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
     this->type = type;

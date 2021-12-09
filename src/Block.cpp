@@ -80,3 +80,39 @@ vector<Cube> Block::buildCubes(){
     return caughtCubes;
 }
 
+vector<Block> Block::buildBlocks(){
+    vector<Block> caughtBlocks;
+    vector<blockPos> newExclusions;
+    
+    //          Only if the caught block is a grass block
+    
+    if(type == blockType::grass){
+        for(auto & i : sideExclusion){
+            if (i == blockPos::top)
+                caughtBlocks.push_back(Block(pos, type, {blockPos::top}));
+            else if (i == blockPos::bottom)
+                caughtBlocks.push_back(Block(pos, blockType::dirt, {blockPos::bottom}));
+            else
+                newExclusions.push_back(i);
+            if(newExclusions.size() != 0)
+                caughtBlocks.push_back(Block(pos, blockType::sideGrass, newExclusions));
+        }
+    }
+    else if(type == blockType::wood){
+        for(auto & i : sideExclusion){
+            if (i == blockPos::top)
+                caughtBlocks.push_back(Block(pos, blockType::woodEnd, {blockPos::top}));
+            else if (i == blockPos::bottom)
+                caughtBlocks.push_back(Block(pos, blockType::woodEnd, {blockPos::bottom}));
+            else
+                newExclusions.push_back(i);
+            if(newExclusions.size() != 0)
+                caughtBlocks.push_back(Block(pos, blockType::wood, newExclusions));
+        }
+    }
+    else
+        caughtBlocks.push_back(Block (pos, type, sideExclusion));
+    
+    return caughtBlocks;
+}
+
