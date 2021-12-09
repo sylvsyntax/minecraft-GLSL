@@ -13,24 +13,19 @@
 #include "Chunk.h"
 #include "Cube.h"
 
-
-
 struct Vector2Key {
 
     int x;
     int y;
 
-    bool operator==(const Vector2Key& other) const
-    {
+    bool operator==(const Vector2Key &other) const {
         return (x == other.x && y == other.y);
     }
 };
 
-template <>
-struct hash<Vector2Key>
-{
-    std::size_t operator()(const Vector2Key& k) const
-    {
+template<>
+struct std::hash<Vector2Key> {
+    std::size_t operator()(const Vector2Key &k) const {
         using std::size_t;
         using std::hash;
         using std::string;
@@ -40,9 +35,10 @@ struct hash<Vector2Key>
         // and bit shifting:
 
         return ((hash<int>()(k.x)
-            ^ (hash<int>()(k.y) << 1)));
+                 ^ (hash<int>()(k.y) << 1)));
     }
 };
+
 class World
 {
 public:
@@ -58,4 +54,4 @@ public:
     void updateChunks();
 };
 
-#endif /* World_hpp */
+#endif /* WORLD_CLASS_H */

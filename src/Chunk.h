@@ -3,6 +3,7 @@
 
 #include "Block.h"
 #include "Mesh.h"
+#include "PerlinNoise.h"
 
 class Chunk
 {

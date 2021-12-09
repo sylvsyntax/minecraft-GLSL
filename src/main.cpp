@@ -13,7 +13,7 @@
 // Setting up GLM for matrices in c++:
 // https://learnopengl.com/In-Practice/2D-Game/Rendering-Sprites
 
-#include <Filesystem>
+
 #include "Mesh.h"
 #include "World.h"
 
@@ -30,9 +30,9 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Minecraft??", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Minecraft??", nullptr, nullptr);
 
-    if (window == NULL)
+    if (window == nullptr)
     {
         cout << "Failed to create GLFW window" << endl;
         glfwTerminate();
@@ -55,10 +55,10 @@ int main()
 
     World minecraft;
     
-    int curxChunk = -1, curyChunk = -1;
+    //int curxChunk = -1, curyChunk = -1;
 
-    bool generating = false;
-    int ie = 0;
+    //bool generating = false;
+    //int ie = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);

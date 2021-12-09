@@ -33,7 +33,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     // Attach Vertex Shader source to the Vertex Shader Object
-    glShaderSource(vertexShader, 1, &vertexSource, NULL);
+    glShaderSource(vertexShader, 1, &vertexSource, nullptr);
 
     // Compile the Vertex Shader into machine code
     glCompileShader(vertexShader);
@@ -43,7 +43,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Attach Fragment Shader source to the Fragment Shader Object
-    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragmentSource, nullptr);
 
     // Compile the Vertex Shader into machine code
     glCompileShader(fragmentShader);
@@ -85,7 +85,7 @@ void Shader::compileErrors(unsigned int shader, const char* type)
         glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
         if (hasCompiled == GL_FALSE)
         {
-            glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+            glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
             cout << "SHADER_COMPILATION_ERROR for:" << type << endl << endl;
         }
     }
@@ -94,7 +94,7 @@ void Shader::compileErrors(unsigned int shader, const char* type)
         glGetProgramiv(shader, GL_COMPILE_STATUS, &hasCompiled);
         if (hasCompiled == GL_FALSE)
         {
-            glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+            glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
             cout << "SHADER_LINKER_ERROR for:" << type << endl << endl;
         }
     }

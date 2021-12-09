@@ -15,32 +15,34 @@ vec3 Chunk::getTop(int x, int y){
 
 Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
 {
+    PerlinNoise perlinNoise(80085);
     position = glm::vec2(x, y);
     vector<float> maxHeights;
     for (int i = 0; i < CHUNK_SIZE; i++)
     {
         for (int j = 0; j < CHUNK_SIZE; j++)
         {
-            float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
-            maxHeights.push_back(val * .1f * MAX_HEIGHT + MAX_HEIGHT / 2);
+            //float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
+            float val = perlinNoise.noise(((double)i / (double)CHUNK_SIZE + x), ((double)j / (double)CHUNK_SIZE + y), 0.5);
+            maxHeights.push_back(val * 15.0/*CHANGE LEFT TO WHATEVER*/ + MAX_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
         }
     }
 
-    for (int xx = 0; xx < CHUNK_SIZE; xx++)
+    for (size_t xx = 0; xx < CHUNK_SIZE; xx++)
     {
-        for (int zz = 0; zz < CHUNK_SIZE; zz++)
+        for (size_t zz = 0; zz < CHUNK_SIZE; zz++)
         {
-            for (int yy = 0; yy < MAX_HEIGHT; yy++)
+            for (size_t yy = 0; yy < MAX_HEIGHT; yy++)
             {
                 blockType BlockType = blockType::dirt;
-                if (yy == (int)round(abs(maxHeights[static_cast<std::vector<float, std::allocator<float>>::size_type>(xx) * CHUNK_SIZE + zz])))
+                if (yy == (int)round(maxHeights[xx * CHUNK_SIZE + zz]))
                     BlockType = blockType::grass;
-                else if (yy < .5f * abs(maxHeights[static_cast<std::vector<float, std::allocator<float>>::size_type>(xx) * CHUNK_SIZE + zz]))
+                else if (yy < .5f * maxHeights[xx * CHUNK_SIZE + zz])
                     BlockType = blockType::stone;
-                else if (yy > (int)round(abs(maxHeights[static_cast<std::vector<float, std::allocator<float>>::size_type>(xx) * CHUNK_SIZE + zz])))
+                else if (yy > (int)round(maxHeights[xx * CHUNK_SIZE + zz]))
                     BlockType = blockType::air;
-                glm::vec3 position = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
-                vec3 newPos = vec3(position.x, position.y, position.z);
+                glm::vec3 blockPosition = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
+                vec3 newPos = vec3(blockPosition.x, blockPosition.y, blockPosition.z);
                 //Moves over the position
                 Block newBlock(newPos, BlockType);
                 newBlock.type = BlockType;
