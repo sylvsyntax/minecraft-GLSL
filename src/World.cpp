@@ -111,15 +111,9 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
 
-<<<<<<< HEAD
-    for (int i = -3; i < 3; i++)
-    {
-        for (int j = -3; j < 3; j++)
-=======
     for (int i = -1; i <= 1; i++)
     {
         for (int j = -1; j <= 1; j++)
->>>>>>> 46e8364a7f4978102f8a299c9e64b76475ce0bca
         {
             generateChunk(i, j);
         }
