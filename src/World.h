@@ -44,6 +44,7 @@ class World
 public:
     World();
     LightingCube sun;
+    double worldTime = 0;
     std::vector<Mesh> sceneMeshes;
     std::vector<Mesh> sceneLights;
     std::unordered_map<Vector2Key, Chunk> chunks;
@@ -52,6 +53,7 @@ public:
 
     void generateChunk(int x, int y);
     void updateChunks();
+    void updateSpecial();
 };
 
 #endif /* WORLD_CLASS_H */

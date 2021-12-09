@@ -154,6 +154,14 @@ face::face(vec3 pt1, vec3 pt2, vec3 pt3, vec3 pt4, vec3 pt5, vec3 pt6) {
     t2 = new triangle(pt4, pt5, pt6);
 }
 
+face::~face(){
+    t1 = nullptr;
+    delete(t1);
+    t2 = nullptr;
+    delete(t2);
+    
+}
+
 //This forces a position for a certain axis of points in a face
 //Don't do this, it's kinda dumb.
 void face::forceAxis(char axis, int num) {
