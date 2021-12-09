@@ -22,24 +22,16 @@ enum structureType{
 class Structures
 {
 public:
-    Structures(structureType type, vec3 pos){
-        vector<blockPos> sideExclus{blockPos::sideLeft, blockPos::sideRight, blockPos::front, blockPos::back};
-        blockArray.push_back(Block(vec3(0,0.2,0) + pos, blockType::wood, sideExclus));
-        blockArray.push_back(Block(vec3(0,0.4,0) + pos, blockType::wood, sideExclus));
-        blockArray.push_back(Block(vec3(0,0.6,0) + pos, blockType::wood, sideExclus));
-        sideExclus.push_back(blockPos::top);
-        blockArray.push_back(Block(vec3(0,0.8,0) + pos, blockType::wood, sideExclus));
-        int startingPt = -2;
-        for(int i = 0; i < 3; i++){
-            for(int v = startingPt; v <= abs(startingPt); v++)
-                for(int z = startingPt; z <= abs(startingPt); z++)
-                    blockArray.push_back(Block(vec3(v * 0.2, 1 + (i * 0.2), z * 0.2) + pos, blockType::leaves));
-            startingPt++;
-        }
-    }
     vector<Block> blockArray;
     vector<LightingCube> LightSources;
     vector<Mesh> sceneMeshes;
+    structureType type;
+    vec3 pos;
+    
+    Structures(structureType type, vec3 pos){
+        this->type = type;
+        this->pos = pos;
+    }
     
     glm::vec3 position;
     
@@ -52,6 +44,24 @@ public:
             }
         }
         return sceneMeshes;
+    }
+    
+    void ApplyBuild(){
+        if(type == Tree){
+            vector<blockPos> sideExclus{blockPos::sideLeft, blockPos::sideRight, blockPos::front, blockPos::back};
+            blockArray.push_back(Block(vec3(0,0.2,0) + pos, blockType::wood, sideExclus));
+            blockArray.push_back(Block(vec3(0,0.4,0) + pos, blockType::wood, sideExclus));
+            blockArray.push_back(Block(vec3(0,0.6,0) + pos, blockType::wood, sideExclus));
+            sideExclus.push_back(blockPos::top);
+            blockArray.push_back(Block(vec3(0,0.8,0) + pos, blockType::wood, sideExclus));
+            int startingPt = -2;
+            for(int i = 0; i < 3; i++){
+                for(int v = startingPt; v <= abs(startingPt); v++)
+                    for(int z = startingPt; z <= abs(startingPt); z++)
+                        blockArray.push_back(Block(vec3(v * 0.2, 1 + (i * 0.2), z * 0.2) + pos, blockType::leaves));
+                startingPt++;
+            }
+        }
     }
 };
 

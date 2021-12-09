@@ -6,6 +6,7 @@ enum class blockType {
 };
 
 const int numOfBlocktypes = 6;
+const float BLOCK_SIZE = 0.2;
 
 enum class blockPos {
     front = 0, bottom = 1, top = 2, back = 3, sideLeft = 4, sideRight = 5

@@ -1,4 +1,5 @@
 #include "Chunk.h"
+#include "Structures.h"
 #include "PerlinNoise.cpp"
 
 float perlin(float x, float y);
@@ -10,7 +11,7 @@ vec3 Chunk::getTop(int x, int y){
     vec3 pos;
     for(int i = 0; i < MAX_HEIGHT; i++)
         if(blocks[x][i][y] == (int)blockType::grass)
-            pos = vec3(position.x * (8 * 0.2) + (x * 0.2), i * 0.2, position.y * (8 * 0.2) + (y * 0.2));
+            pos = vec3(position.x * (CHUNK_SIZE * BLOCK_SIZE) + (x * BLOCK_SIZE), i * BLOCK_SIZE, position.y * (CHUNK_SIZE * BLOCK_SIZE) + (y * BLOCK_SIZE));
     return pos;
 }
 
@@ -33,7 +34,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
         {
             //float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
             float val = perlinNoise.noise(((double)i / (double)CHUNK_SIZE + x), ((double)j / (double)CHUNK_SIZE + y), 0.5);
-            maxHeights.push_back(val * 7.0/*CHANGE LEFT TO WHATEVER*/ + MAX_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
+            maxHeights.push_back(val * 20.0/*CHANGE LEFT TO WHATEVER*/ + (MAX_HEIGHT) / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
         }
     }
 
@@ -50,7 +51,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
                     BlockType = blockType::stone;
                 else if (yy > (int)round(maxHeights[xx * CHUNK_SIZE + zz]))
                     BlockType = blockType::air;
-                glm::vec3 blockPosition = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * .2f;
+                glm::vec3 blockPosition = glm::vec3(xx + CHUNK_SIZE * x, yy, zz + CHUNK_SIZE * y) * BLOCK_SIZE;
                 vec3 newPos = vec3(blockPosition.x, blockPosition.y, blockPosition.z);
                 //Moves over the position
                 Block newBlock(newPos, BlockType);
@@ -59,6 +60,12 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
             }
         }
     }
+    
+    /*
+    Structures tree = Structures(Tree, vec3(0, 20, 0));
+    tree.ApplyBuild();
+    for(int i = 0; i < tree.blockArray.size(); i++)
+        blocks[0] [0] [(int)tree.blockArray[i].pos.getz()] = (int)tree.blockArray[i].type;*/
 }
 
 // YOINKED FROM WIKI 

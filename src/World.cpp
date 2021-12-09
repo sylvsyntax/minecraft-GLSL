@@ -110,15 +110,19 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
 
     // CHUNK GEN BABY
-
-    for (int i = -2; i <= 2; i++)
+    int t = 0;
+    int genSize = 2;
+    for (int i = -genSize; i <= genSize; i++)
     {
-        for (int j = -2; j <= 2; j++)
+        for (int j = -genSize; j <= genSize; j++)
         {
+            t++;
+            cout << "Building chunk: " << t << endl;
             generateChunk(i, j);
         }
     }
-    updateChunks();
+    //generateChunk(0, 0);
+    //updateChunks();
     
     
     
@@ -253,7 +257,7 @@ void World::updateChunks()
                             
                             
                             //The block gets made
-                            Block generateBlock(vec3(i.second.position.x * (8 * .2) + (x * 0.2), (y * 0.2), i.second.position.y * (8 * .2) + (z * 0.2)), blockType(i.second.blocks[x][y][z]), generateSide);
+                            Block generateBlock(vec3(i.second.position.x * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (x * BLOCK_SIZE), (y * BLOCK_SIZE), i.second.position.y * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (z * BLOCK_SIZE)), blockType(i.second.blocks[x][y][z]), generateSide);
                             
                             
                             //Build each individual block and assign it to blocks

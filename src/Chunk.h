@@ -8,12 +8,13 @@
 class Chunk
 {
 public:
-	static const int CHUNK_SIZE = 8;
-	static const int MAX_HEIGHT = 30;
+	static const int CHUNK_SIZE = 16;
+    static const int MAX_HEIGHT = 30;
+    static const int MAX_GRASS_HEIGHT = 20;
 	// https://stackoverflow.com/a/7367817
 	// 1D to 3D 
 	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
-	int blocks[CHUNK_SIZE][MAX_HEIGHT][CHUNK_SIZE];
+	int blocks[CHUNK_SIZE][MAX_HEIGHT + 10][CHUNK_SIZE];
 	glm::ivec2 position;
 	
 	Chunk() = default;
