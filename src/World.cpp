@@ -157,7 +157,7 @@ void World::updateSpecial(){
 
 void World::updateChunks()
 {
-    vector<vector<Block>> blocks(numOfBlocktypes);
+    vector<vector<Block>> blocks(numOfBlocktypes + 1);
     for(auto& i : blocks){
         i.reserve(32000);
     }
@@ -165,6 +165,7 @@ void World::updateChunks()
     vector<blockPos> generateSide;
     
     for (auto& i : chunks) {
+        //vec3 posToPlace = i.second.blocks
         
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {
@@ -254,6 +255,7 @@ void World::updateChunks()
                             
                             
                             
+                            
                             //The block gets made
                             Block generateBlock(vec3(i.second.position.x * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (x * BLOCK_SIZE), (y * BLOCK_SIZE), i.second.position.y * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (z * BLOCK_SIZE)), blockType(i.second.blocks[x][y][z]), generateSide);
                             generateSide.clear();
@@ -294,8 +296,11 @@ void World::updateChunks()
             }
             if(cubeInd.size() != 0){
                 vector<Texture> tex;
-                cout << (int)j[z].type;
-                tex.push_back(textures[(int)j[z].type]);
+                if(z == (int)blockType::wood)
+                    tex.push_back(textures[(int)blockType::wood]);
+                else
+                    tex.push_back(textures[(int)j[z].type]);
+                
                 
                 glm::vec3 cubePos = glm::vec3(i.second.position.x * 8 * 0.2, 0, i.second.position.y * 8 * 0.2);
                 glm::mat4 cubeModel = glm::mat4(1.0f);
