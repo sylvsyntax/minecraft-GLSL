@@ -302,8 +302,7 @@ void World::updateChunks()
                 cubeModel = glm::translate(cubeModel, cubePos);
                 
                 Mesh set(cubeVertex, cubeInd, tex);
-                if(z != 2)        //Removes the faces that use grass
-                    sceneMeshes.push_back(set);
+                sceneMeshes.push_back(set);
                 j.clear();
             }
             z++;

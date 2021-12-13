@@ -39,4 +39,4 @@ public:
 	void Inputs(GLFWwindow* window);
 };
 
-#endif
+#endif /* CAMERA_CLASS_H */

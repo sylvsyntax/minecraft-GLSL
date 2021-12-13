@@ -45,4 +45,4 @@ public:
 
 };
 
-#endif /* Cube_hpp */
+#endif /* CUBE_CLASS_H */

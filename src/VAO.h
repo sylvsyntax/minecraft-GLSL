@@ -19,4 +19,4 @@ public:
 	void Delete();
 };
 
-#endif
+#endif /* VAO_CLASS_H */

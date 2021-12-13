@@ -32,4 +32,4 @@ public:
 };
 
 
-#endif /* Block_hpp */
+#endif /* BLOCK_CLASS_H */

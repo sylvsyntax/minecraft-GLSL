@@ -12,4 +12,4 @@ enum class blockPos {
     front = 0, bottom = 1, top = 2, back = 3, sideLeft = 4, sideRight = 5
 };
 
-#endif
+#endif /* BLOCK_ENUMS_H */

@@ -184,4 +184,4 @@ public:
 };
 
 
-#endif
+#endif /* SHAPE_CLASS_H */

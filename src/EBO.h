@@ -19,4 +19,4 @@ public:
 	void Delete();
 };
 
-#endif
+#endif /* EBO_CLASS_H */

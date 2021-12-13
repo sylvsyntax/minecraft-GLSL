@@ -1,5 +1,7 @@
 #include <vector>
 
+// YOINKED FROM https://github.com/sol-prog/Perlin_Noise
+// license says its allowed as long as we are licensed under GPLv3 so we'll change license soon
 
 // THIS CLASS IS A TRANSLATION TO C++11 FROM THE REFERENCE
 // JAVA IMPLEMENTATION OF THE IMPROVED PERLIN FUNCTION (see http://mrl.nyu.edu/~perlin/noise/)
@@ -26,4 +28,4 @@ private:
     double grad(int hash, double x, double y, double z);
 };
 
-#endif
+#endif /* PERLINNOISE_CLASS_H */

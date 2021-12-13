@@ -65,4 +65,4 @@ public:
     }
 };
 
-#endif
+#endif /* STRUCTURES_CLASS_H */

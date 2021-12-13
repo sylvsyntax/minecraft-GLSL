@@ -26,4 +26,4 @@ public:
 	void Delete();
 };
 
-#endif
+#endif /* TEXTURE_CLASS_H */

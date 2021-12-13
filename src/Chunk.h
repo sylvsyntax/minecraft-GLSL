@@ -23,4 +23,4 @@ public:
     vec3 getLocalTop(int x, int y);
 };
 
-#endif
+#endif /* CHUNK_CLASS_H */

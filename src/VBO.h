@@ -29,4 +29,4 @@ public:
 	void Delete();
 };
 
-#endif
+#endif /* VBO_CLASS_H */

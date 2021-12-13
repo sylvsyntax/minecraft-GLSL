@@ -28,4 +28,4 @@ public:
 };
 
 
-#endif
+#endif /* MESH_CLASS_H */
