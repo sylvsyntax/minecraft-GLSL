@@ -58,9 +58,9 @@ vector<Cube> Block::buildCubes(){
                 caughtCubes.push_back(Cube(blockType::dirt, pos, {blockPos::bottom}));
             else
                 newExclusions.push_back(i);
-            if(newExclusions.size() != 0)
-                caughtCubes.push_back(Cube(blockType::sideGrass, pos, newExclusions));
         }
+        if(newExclusions.size() != 0)
+            caughtCubes.push_back(Cube(blockType::sideGrass, pos, newExclusions));
     }
     else if(type == blockType::wood){
         for(auto & i : sideExclusion){
@@ -70,9 +70,9 @@ vector<Cube> Block::buildCubes(){
                 caughtCubes.push_back(Cube(blockType::woodEnd, pos, {blockPos::bottom}));
             else
                 newExclusions.push_back(i);
-            if(newExclusions.size() != 0)
-                caughtCubes.push_back(Cube(blockType::wood, pos, newExclusions));
         }
+        if(newExclusions.size() != 0)
+            caughtCubes.push_back(Cube(blockType::wood, pos, newExclusions));
     }
     else
         caughtCubes.push_back(Cube (type, pos, sideExclusion));
@@ -94,9 +94,9 @@ vector<Block> Block::buildBlocks(){
                 caughtBlocks.push_back(Block(pos, blockType::dirt, {blockPos::bottom}));
             else
                 newExclusions.push_back(i);
-            if(newExclusions.size() != 0)
-                caughtBlocks.push_back(Block(pos, blockType::sideGrass, newExclusions));
         }
+        if(newExclusions.size() != 0)
+            caughtBlocks.push_back(Block(pos, blockType::sideGrass, newExclusions));
     }
     else if(type == blockType::wood){
         for(auto & i : sideExclusion){
@@ -106,9 +106,9 @@ vector<Block> Block::buildBlocks(){
                 caughtBlocks.push_back(Block(pos, blockType::woodEnd, {blockPos::bottom}));
             else
                 newExclusions.push_back(i);
-            if(newExclusions.size() != 0)
-                caughtBlocks.push_back(Block(pos, blockType::wood, newExclusions));
         }
+        if(newExclusions.size() != 0)
+            caughtBlocks.push_back(Block(pos, blockType::wood, newExclusions));
     }
     else
         caughtBlocks.push_back(Block (pos, type, sideExclusion));
