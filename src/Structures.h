@@ -15,7 +15,7 @@
 #include "World.h"
 
 enum structureType{
-    Tree, LargeTree
+    Tree, LargeTree, House
 };
 
 
@@ -70,6 +70,16 @@ public:
             blockArray.push_back(Block(vec3(0,1,0) + pos, blockType::wood));
             blockArray.push_back(Block(vec3(0,2,0) + pos, blockType::wood));
             blockArray.push_back(Block(vec3(0,3,0) + pos, blockType::wood));
+            int startingPt = -2;
+            for(int i = 0; i < 3; i++){
+                for(int v = startingPt; v <= abs(startingPt); v++)
+                    for(int z = startingPt; z <= abs(startingPt); z++)
+                        blockArray.push_back(Block(vec3(v, 3 + i, z) + pos, blockType::leaves));
+                startingPt++;
+            }
+        }
+        if(type == House){
+            blockArray.push_back(Block(vec3(0,0,0) + pos, blockType::woodPanel));
             int startingPt = -2;
             for(int i = 0; i < 3; i++){
                 for(int v = startingPt; v <= abs(startingPt); v++)

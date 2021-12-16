@@ -282,9 +282,10 @@ Cube::Cube(blockType type, vec3 pos) : position(pos.getx(), pos.gety(), pos.getz
     }
     
     
-    GLuint cubeInd[36 * 6]{};
-    for (int i = 0; i < (36 * 6); i++){
+    GLuint cubeInd[36]{};
+    for (int i = 0; i < 36; i++){
         cubeInd[i] = i;
+        cubeVex[i] = vec3(cubeVertex[i].position.x, cubeVertex[i].position.y, cubeVertex[i].position.z);
     }
     
     //This is our translation (please fix)
@@ -564,15 +565,12 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion) : position(
     }
 }
 
-Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion, face coob[6]) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
+Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion, Cube coob) : position(pos.getx(), pos.gety(), pos.getz()), shaderProgram("src/Shaders/default.vert", "src/Shaders/default.frag") {
     this->type = type;
     if (type == blockType::air) return;
     glm::vec3 defaultNormal = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 defaultColor = glm::vec3(1.0f, 1.0f, 1.0f);
     
-    
-    for(int i = 0; i < 6; i++)
-        cube[i] = coob[i];
 
     vector<Vertex> cubeVertex(6 * sideExclusion.size());
     
@@ -582,22 +580,27 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion, face coob[6
         defaultColor = glm::vec3(1, 1, 1);
     
     int v = 0;
+    for(int i = 0; i < 36; i++)
+        cubeVex[i] = coob.cubeVex[i];
+    
     for(int i = 0; i < 6; i++){
-        cube[i].scale(vec3(0.2));
-        cube[i].translate(pos);
+        for(int z = 0; z < 6; z++){
+            cubeVex[i*6 + z].scalePt(vec3(0.2));
+            cubeVex[i*6 + z].addPt(vec3(pos));
+        }
         for(blockPos f : sideExclusion)
             if((int)f == i){
-                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 0] = {regVecToGLM(cube[i].t1->pt1), defaultNormal, defaultColor, glm::vec2(0, 0)};
-                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 1] = {regVecToGLM(cube[i].t1->pt2), defaultNormal, defaultColor, glm::vec2(1, 0)};
-                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 2] = {regVecToGLM(cube[i].t1->pt3), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 3] = {regVecToGLM(cube[i].t2->pt1), defaultNormal, defaultColor, glm::vec2(1, 1)};
-                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 4] = {regVecToGLM(cube[i].t2->pt2), defaultNormal, defaultColor, glm::vec2(0, 1)};
-                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 5] = {regVecToGLM(cube[i].t2->pt3), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 0] = {regVecToGLM(cubeVex[(i * 6) + 0]), defaultNormal, defaultColor, glm::vec2(0, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 1] = {regVecToGLM(cubeVex[(i * 6) + 1]), defaultNormal, defaultColor, glm::vec2(1, 0)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 2] = {regVecToGLM(cubeVex[(i * 6) + 2]), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 3] = {regVecToGLM(cubeVex[(i * 6) + 3]), defaultNormal, defaultColor, glm::vec2(1, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 4] = {regVecToGLM(cubeVex[(i * 6) + 4]), defaultNormal, defaultColor, glm::vec2(0, 1)};
+                cubeVertex[static_cast<std::vector<Vertex, std::allocator<Vertex>>::size_type>(v) * 6 + 5] = {regVecToGLM(cubeVex[(i * 6) + 5]), defaultNormal, defaultColor, glm::vec2(1, 0)};
                 v++;
             }
     }
     vector<GLuint> cubeInd;
-    for (int i = 0; i < (36 * sideExclusion.size()); i++){
+    for (int i = 0; i < (6 * (sideExclusion.size() + 1)); i++){
         cubeInd.push_back(i);
     }
     
@@ -623,8 +626,6 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion, face coob[6
     Mesh block(cubeVertex, cubeInd, tex);
     mesh = block;
     
-    shaderProgram.Activate();
-    
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
     
     for (auto & i : LightSources)
@@ -636,4 +637,5 @@ Cube::Cube(blockType type, vec3 pos, vector<blockPos> sideExclusion, face coob[6
         glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), pos.getx(), pos.gety(), pos.getz());
     }
+    shaderProgram.Activate();
 }

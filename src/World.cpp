@@ -107,7 +107,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
     int t = 0;
-    int genSize = 1;
+    int genSize = 2;
     for (int i = -genSize; i <= genSize; i++)
     {
         for (int j = -genSize; j <= genSize; j++)
@@ -283,7 +283,8 @@ void World::updateChunks()
             Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
             Texture("src/Textures/wood_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
             Texture("src/Textures/wood_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+            Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            Texture("src/Textures/wood_panel.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
         };
         int z = 0;
         cout << "Starting Batch Rendering" << endl;
@@ -291,7 +292,7 @@ void World::updateChunks()
             vector<Vertex> cubeVertex;
             if(j.size())
             for (auto & f : j) //Per block
-                for (auto & j : f.buildCube(defCoob.cube).getVertexSet(f.pos, f.sideExclusion))
+                for (auto & j : f.buildCube(defCoob).getVertexSet(f.pos, f.sideExclusion))
                     cubeVertex.push_back(j);
             
             
@@ -301,10 +302,9 @@ void World::updateChunks()
             }
             if(cubeInd.size() != 0){
                 vector<Texture> tex;
-                if(z == (int)blockType::wood)
-                    tex.push_back(textures[(int)blockType::wood]);
-                else
-                    tex.push_back(textures[(int)j[z].type]);
+                for(int texNum = 0; texNum <= numOfBlocktypes; texNum++)
+                    if(z == texNum)
+                        tex.push_back(textures[texNum]);
                 
                 
                 glm::vec3 cubePos = glm::vec3(i.second.position.x * 8 * 0.2, 0, i.second.position.y * 8 * 0.2);

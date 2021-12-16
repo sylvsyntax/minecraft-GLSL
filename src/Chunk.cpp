@@ -28,7 +28,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
         {
             //float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
             float val = perlinNoise.noise(((double)i / (double)CHUNK_SIZE + x), ((double)j / (double)CHUNK_SIZE + y), 0.5);
-            maxHeights.push_back(val * 20.0/*CHANGE LEFT TO WHATEVER*/ + MAX_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
+            maxHeights.push_back(val * 20.0/*CHANGE LEFT TO WHATEVER*/ + MAX_GRASS_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
         }
     }
 
@@ -56,6 +56,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
     }
     Structures tree = Structures(Tree, getLocalTop(8, 8));
     tree.ApplyBuildWithoutTranslation();
+    if((x != 0) && (y != 0))
     for(auto & i : tree.blockArray){
         if((i.pos.gety() < MAX_HEIGHT) && (i.pos.getx() < CHUNK_SIZE) && (i.pos.getz() < CHUNK_SIZE)){
         blocks[(int)(i.pos.getx())][(int)(i.pos.gety()) + 1][(int)(i.pos.getz())] = (int)i.type;

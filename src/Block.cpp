@@ -43,7 +43,7 @@ Cube Block::buildCube (){
     return Cube(type, pos, sideExclusion);
 }
 
-Cube Block::buildCube (face coob[6]){
+Cube Block::buildCube (Cube coob){
     return Cube(type, pos, sideExclusion, coob);
 }
 

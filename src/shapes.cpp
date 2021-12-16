@@ -33,6 +33,10 @@ vec3 vec3::operator - (const vec3& param){
     return temp;
 }
 
+bool vec3::operator == (const vec3& param){
+    return ((this->getx() == param.x) && (this->gety() == param.y) && (this->getz() == param.z));
+}
+
 void vec3::setPts(vec3 pt) {
     x = pt.getx();
     y = pt.gety();

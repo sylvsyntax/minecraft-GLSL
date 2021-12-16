@@ -9,8 +9,8 @@ class Chunk
 {
 public:
 	static const int CHUNK_SIZE = 16;
-    static const int MAX_HEIGHT = 30;
-    static const int MAX_GRASS_HEIGHT = 20;
+    static const int MAX_HEIGHT = 80;
+    static const int MAX_GRASS_HEIGHT = 30;
 	// https://stackoverflow.com/a/7367817
 	// 1D to 3D 
 	// Flat[x + WIDTH * (y * DEPTH * z)] = x,y,z
