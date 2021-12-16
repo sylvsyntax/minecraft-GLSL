@@ -152,7 +152,7 @@ void World::updateSpecial(){
 void World::updateChunk(int xx, int yy)
 {
     Vector2Key chunkPos = {xx,yy};
-    blocks.resize(7);
+    blocks.resize(numOfBlocktypes + 1);
     for(auto& i : blocks){
         i.reserve(32000);
     }
@@ -170,6 +170,7 @@ void World::updateChunk(int xx, int yy)
         {
             for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
             {
+                //cout << x << " " << y << " " << z << endl;
                 if (chunks[chunkPos].blocks[x][y][z] != (int)blockType::air) {
                     //RIGHT SIDE
                     if (x == Chunk::CHUNK_SIZE - 1) {
@@ -300,7 +301,7 @@ void World::renderBatch() {
         vector<Vertex> cubeVertex;
         if (!blocks[z].empty())
             for (auto &f: blocks[z]) //Per block
-                for (auto &vert: f.buildCube(defCoob.cube).getVertexSet(f.pos, f.sideExclusion))
+                for (auto &vert: f.buildCube(defCoob).getVertexSet(f.pos, f.sideExclusion))
                     cubeVertex.push_back(vert);
 
         // make blocks outside and add current chunk to it
