@@ -107,7 +107,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
     int t = 0;
-    int genSize = 1;
+    int genSize = 4;
     for (int i = -genSize; i <= genSize; i++)
     {
         for (int j = -genSize; j <= genSize; j++)
