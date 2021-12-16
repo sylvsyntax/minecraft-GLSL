@@ -62,6 +62,17 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
         blocks[(int)(i.pos.getx())][(int)(i.pos.gety()) + 1][(int)(i.pos.getz())] = (int)i.type;
         }
     }
+    else if ((x == 0) && (y == 0)){
+        Structures house = Structures(House, getLocalTop(8, 8));
+        house.ApplyBuildWithoutTranslation();
+        
+        for(auto & i : house.blockArray){
+            if((i.pos.gety() < MAX_HEIGHT) && (i.pos.getx() < CHUNK_SIZE) && (i.pos.getz() < CHUNK_SIZE)){
+            blocks[(int)(i.pos.getx())][(int)(i.pos.gety()) + 1][(int)(i.pos.getz())] = (int)i.type;
+            }
+        }
+        
+    }
     
 
     /*Structures tree = Structures(Tree, vec3(0, 20, 0));

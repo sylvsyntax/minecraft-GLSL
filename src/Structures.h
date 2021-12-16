@@ -79,14 +79,40 @@ public:
             }
         }
         if(type == House){
-            blockArray.push_back(Block(vec3(0,0,0) + pos, blockType::woodPanel));
-            int startingPt = -2;
-            for(int i = 0; i < 3; i++){
-                for(int v = startingPt; v <= abs(startingPt); v++)
-                    for(int z = startingPt; z <= abs(startingPt); z++)
-                        blockArray.push_back(Block(vec3(v, 3 + i, z) + pos, blockType::leaves));
-                startingPt++;
+            int houseSize = 4;
+            int houseHeight = 4;
+            int roofHeight = 10;
+            for(int i = -houseSize; i <= houseSize; i++)
+                for(int f = -houseSize; f <= houseSize; f++)
+                    blockArray.push_back(Block(vec3(i,0,f) + pos, blockType::woodPanel));
+            
+            for(int x = -houseSize; x <= houseSize; x++)
+                for(int z = -houseSize; z <= houseSize; z++)
+                    for(int y = 0; y <= houseHeight; y++)
+                        if((abs(x) == houseSize) && (abs(z) == houseSize))
+                            blockArray.push_back(Block(vec3(x,y,z) + pos, blockType::wood));
+                        else if((abs(x) == houseSize) || (abs(z) == houseSize))
+                            if((x != 0) || (y > 2) || (z != houseSize))
+                                blockArray.push_back(Block(vec3(x,y,z) + pos, blockType::woodPanel));
+            int startingPt = houseSize + 1;
+            for(int i = houseHeight; i < roofHeight; i++){
+                for(int v = -startingPt; v <= startingPt; v++)
+                    for(int z = -houseSize - 1; z <= houseSize + 1; z++)
+                        if(abs(v) == startingPt)
+                            blockArray.push_back(Block(vec3(v, i, z) + pos, blockType::wood));
+                        else if((abs(v) == houseSize) && (abs(z) == houseSize))
+                            blockArray.push_back(Block(vec3(v,i,z) + pos, blockType::wood));
+                        else if(abs(z) == houseSize)
+                            blockArray.push_back(Block(vec3(v, i, z) + pos, blockType::woodPanel));
+                startingPt--;
             }
+            for(int x = -houseSize; x <= houseSize; x++)
+                for(int z = -houseSize; z <= houseSize; z++)
+                    for(int y = -4; y <= 0; y++)
+                        if((abs(x) == houseSize) && (abs(z) == houseSize))
+                            blockArray.push_back(Block(vec3(x,y,z) + pos, blockType::wood));
+            
+            
         }
     }
 };
