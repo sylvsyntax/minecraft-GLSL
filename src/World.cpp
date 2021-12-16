@@ -107,7 +107,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
     int t = 0;
-    int genSize = 5;
+    int genSize = 4;
     for (int i = -genSize; i <= genSize; i++)
     {
         for (int j = -genSize; j <= genSize; j++)
@@ -291,7 +291,8 @@ void World::renderBatch() {
         Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/wood_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("src/Textures/wood_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+        Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/wood_panel.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
     };
     cout << "Starting Batch Rendering" << endl;
     Cube defCoob(blockType::grass, vec3(0));

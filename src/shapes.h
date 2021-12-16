@@ -44,6 +44,7 @@ public:
     
     vec3 operator + (const vec3& param);
     vec3 operator - (const vec3& param);
+    bool operator == (const vec3& param);
 
 private:
     float x;
