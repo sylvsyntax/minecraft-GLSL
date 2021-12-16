@@ -157,14 +157,18 @@ void World::updateSpecial(){
 
 void World::updateChunks()
 {
+    Cube defCoob(blockType::grass, vec3(0));
     vector<vector<Block>> blocks(numOfBlocktypes + 1);
     for(auto& i : blocks){
         i.reserve(32000);
     }
     sceneMeshes.clear();
     vector<blockPos> generateSide;
-    
+    cout << "Drawing Chunks" << endl;
+    int chunkOn = 0;
     for (auto& i : chunks) {
+        chunkOn++;
+        cout << "Developing Chunk: " << chunkOn << endl;
         //vec3 posToPlace = i.second.blocks
         
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
@@ -282,11 +286,12 @@ void World::updateChunks()
             Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
         };
         int z = 0;
+        cout << "Starting Batch Rendering" << endl;
         for(auto & j : blocks){ //Per vector
             vector<Vertex> cubeVertex;
             if(j.size())
             for (auto & f : j) //Per block
-                for (auto & j : f.buildCube().getVertexSet(f.pos, f.sideExclusion))
+                for (auto & j : f.buildCube(defCoob.cube).getVertexSet(f.pos, f.sideExclusion))
                     cubeVertex.push_back(j);
             
             
@@ -308,10 +313,12 @@ void World::updateChunks()
                 
                 Mesh set(cubeVertex, cubeInd, tex);
                 sceneMeshes.push_back(set);
+                cout << "Pushing set for blocktype: " << z << endl;
                 j.clear();
             }
             z++;
         }
+        cout << endl << endl;
     }
 
     /*lightShader.Activate();

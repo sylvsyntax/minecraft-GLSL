@@ -43,6 +43,10 @@ Cube Block::buildCube (){
     return Cube(type, pos, sideExclusion);
 }
 
+Cube Block::buildCube (face coob[6]){
+    return Cube(type, pos, sideExclusion, coob);
+}
+
 
 vector<Cube> Block::buildCubes(){
     vector<Cube> caughtCubes;

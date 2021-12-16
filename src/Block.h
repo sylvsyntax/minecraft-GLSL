@@ -24,6 +24,7 @@ public:
     vector<blockPos> sideExclusion;
     vec3 pos;
     Cube buildCube();
+    Cube buildCube (face coob[6]);
     vector<Cube> buildCubes();
     vector<Block> buildBlocks();
     blockType type;

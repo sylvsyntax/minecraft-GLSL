@@ -95,7 +95,7 @@ void Shader::compileErrors(unsigned int shader, const char* type)
         if (hasCompiled == GL_FALSE)
         {
             glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
-            cout << "SHADER_LINKER_ERROR for:" << type << endl << endl;
+            //s cout << "SHADER_LINKER_ERROR for:" << type << endl << endl;
         }
     }
 }

@@ -79,7 +79,7 @@ int main()
         //minecraft.updateSpecial();
 		camera.Inputs(window);
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
-        cout << "Total Chunks: " << minecraft.chunks.size() << "\n\n";
+        //cout << "Total Chunks: " << minecraft.chunks.size() << "\n\n";
 
         for (auto & i : minecraft.sceneMeshes)
         {
