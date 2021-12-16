@@ -63,7 +63,7 @@ int main()
     //int ie = 0;
     
     double prevTime = glfwGetTime();
-    
+    glm::vec2 oldPos = {0,0};
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -81,6 +81,15 @@ int main()
 		camera.updateMatrix(65.0f, 0.1f, 100.0f);
         //cout << "Total Chunks: " << minecraft.chunks.size() << "\n\n";
 
+        // do dynamic chunks here
+        glm::vec2 newPos = World::playerPositionToChunkPosition(camera.Position);
+        /*if(newPos != oldPos) {
+            cout << newPos.x << " " << newPos.y << endl;
+            minecraft.generateChunk(newPos.x, newPos.y);
+            minecraft.updateChunk(newPos.x, newPos.y);
+            oldPos = newPos;
+        }*/
+        
         for (auto & i : minecraft.sceneMeshes)
         {
             i.Draw(minecraft.shaderProgram, camera);

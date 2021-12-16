@@ -22,13 +22,14 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
     PerlinNoise perlinNoise(80085);
     position = glm::vec2(x, y);
     vector<float> maxHeights;
+    int goodNoiseValue = 64;
     for (int i = 0; i < CHUNK_SIZE; i++)
     {
         for (int j = 0; j < CHUNK_SIZE; j++)
         {
             //float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
-            float val = perlinNoise.noise(((double)i / (double)CHUNK_SIZE + x), ((double)j / (double)CHUNK_SIZE + y), 0.5);
-            maxHeights.push_back(val * 20.0/*CHANGE LEFT TO WHATEVER*/ + MAX_HEIGHT / 4/* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
+            float val = perlinNoise.noise(((double)i / (double)goodNoiseValue + (double)x * CHUNK_SIZE / (double)goodNoiseValue), ((double)j / (double)goodNoiseValue + (double)y * CHUNK_SIZE / (double)goodNoiseValue), 0.5);
+            maxHeights.push_back(val * MAX_HEIGHT/*CHANGE LEFT TO WHATEVER + MAX_HEIGHT / 4*//* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
         }
     }
 

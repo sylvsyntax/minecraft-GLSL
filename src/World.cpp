@@ -92,8 +92,8 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
             }
         }
     }*/
-    
-    
+
+
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(sun.lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
@@ -107,7 +107,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
     int t = 0;
-    int genSize = 1;
+    int genSize = 5;
     for (int i = -genSize; i <= genSize; i++)
     {
         for (int j = -genSize; j <= genSize; j++)
@@ -115,18 +115,12 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
             t++;
             cout << "Building chunk: " << t << endl;
             generateChunk(i, j);
+            updateChunk(i,j);
         }
     }
-    updateChunks();
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    renderBatch();
+    //updateChunks();
+
 }
 
 void World::generateChunk(int x, int y)
@@ -139,7 +133,7 @@ void World::generateChunk(int x, int y)
     Chunk chunk(x, y);
     chunks[Vector2Key{ x, y }] = chunk;
     //Build default grass Block
-    
+
 
 }
 bool generatedBlock;
@@ -155,170 +149,120 @@ void World::updateSpecial(){
 }
 
 
-void World::updateChunks()
+void World::updateChunk(int xx, int yy)
 {
-    Cube defCoob(blockType::grass, vec3(0));
-    vector<vector<Block>> blocks(numOfBlocktypes + 1);
+    Vector2Key chunkPos = {xx,yy};
+    blocks.resize(7);
     for(auto& i : blocks){
         i.reserve(32000);
     }
-    sceneMeshes.clear();
+    //sceneMeshes.clear();
     vector<blockPos> generateSide;
     cout << "Drawing Chunks" << endl;
-    int chunkOn = 0;
-    for (auto& i : chunks) {
-        chunkOn++;
-        cout << "Developing Chunk: " << chunkOn << endl;
-        //vec3 posToPlace = i.second.blocks
-        
-        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+    //int chunkOn = 0;
+    //chunkOn++;
+    cout << "Developing Chunk: " << xx << "," << yy << endl;
+    //vec3 posToPlace = i.second.blocks
+
+    for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+    {
+        for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
         {
-            for (int y = 0; y < Chunk::MAX_HEIGHT; y++)
+            for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
             {
-                for (int z = 0; z < Chunk::CHUNK_SIZE; z++)
-                {
-                    if (i.second.blocks[x][y][z] != (int)blockType::air) {
-                        //RIGHT SIDE
-                        if (x == Chunk::CHUNK_SIZE - 1) {
-                            if (chunks.find(Vector2Key{ i.second.position.x + 1, i.second.position.y }) != chunks.end())
-                            {
-                                if (chunks[Vector2Key{ i.second.position.x + 1,i.second.position.y }].blocks[0][y][z] == (int)blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::sideRight);
-                                }
-                            }
-                            else
-                                generateSide.push_back(blockPos::sideRight);
-                        }
-                        else if (i.second.blocks[x + 1][y][z] == (int)blockType::air)
-                            generateSide.push_back(blockPos::sideRight);
-
-
-                        //LEFT SIDE
-                        if (x == 0) {
-                            if (chunks.find(Vector2Key{ i.second.position.x - 1, i.second.position.y }) != chunks.end())
-                            {
-                                if (chunks[Vector2Key{ i.second.position.x - 1,i.second.position.y }].blocks[Chunk::CHUNK_SIZE - 1][y][z] == (int)blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::sideLeft);
-                                }
-                            }
-                            else
-                                generateSide.push_back(blockPos::sideLeft);
-                        }
-                        else if (i.second.blocks[x - 1][y][z] == (int)blockType::air)
-                            generateSide.push_back(blockPos::sideLeft);
-
-
-                        //TOP
-                        if (y == Chunk::MAX_HEIGHT - 1)
-                            generateSide.push_back(blockPos::top);
-                        else if (i.second.blocks[x][y + 1][z] == (int)blockType::air)
-                            generateSide.push_back(blockPos::top);
-
-                        //BOTTOM
-                        if (y != 0)
-                            if (i.second.blocks[x][y - 1][z] == (int)blockType::air)
-                                generateSide.push_back(blockPos::bottom);
-
-
-                        //BACK
-                        if (z == Chunk::CHUNK_SIZE - 1) {
-                            if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y + 1 }) != chunks.end())
-                            {
-                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y + 1 }].blocks[x][y][0]== (int)blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::back);
-                                }
-                            }
-                            else
-                                generateSide.push_back(blockPos::back);
-                        }
-                        else if (i.second.blocks[x][y][z + 1] == (int)blockType::air)
-                            generateSide.push_back(blockPos::back);
-
-
-                        //FRONT
-                        if (z == 0) {
-                            if (chunks.find(Vector2Key{ i.second.position.x, i.second.position.y - 1 }) != chunks.end())
-                            {
-                                if (chunks[Vector2Key{ i.second.position.x,i.second.position.y - 1 }].blocks[x][y][Chunk::CHUNK_SIZE - 1] == (int)blockType::air)
-                                {
-                                    generateSide.push_back(blockPos::front);
-                                }
-                            }
-                            else
-                                generateSide.push_back(blockPos::front);
-                        }
-                        else if (i.second.blocks[x][y][z - 1] == (int)blockType::air)
-                            generateSide.push_back(blockPos::front);
-                        
-                        if(generateSide.size() != 0)
+                if (chunks[chunkPos].blocks[x][y][z] != (int)blockType::air) {
+                    //RIGHT SIDE
+                    if (x == Chunk::CHUNK_SIZE - 1) {
+                        if (chunks.find(Vector2Key{ xx + 1, yy }) != chunks.end())
                         {
-                            //Switch to batch rendering
-                            
-                            
-                            
-                            
-                            //The block gets made
-                            Block generateBlock(vec3(i.second.position.x * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (x * BLOCK_SIZE), (y * BLOCK_SIZE), i.second.position.y * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (z * BLOCK_SIZE)), blockType(i.second.blocks[x][y][z]), generateSide);
-                            generateSide.clear();
-                            
-                            //Build each individual block and assign it to blocks
-                            for(auto & z : generateBlock.buildBlocks()){
-                                blocks[(int)z.type].push_back(z);
+                            if (chunks[Vector2Key{ xx + 1,yy }].blocks[0][y][z] == (int)blockType::air)
+                            {
+                                generateSide.push_back(blockPos::sideRight);
                             }
+                        }
+                        else
+                            generateSide.push_back(blockPos::sideRight);
+                    }
+                    else if (chunks[chunkPos].blocks[x + 1][y][z] == (int)blockType::air)
+                        generateSide.push_back(blockPos::sideRight);
+
+
+                    //LEFT SIDE
+                    if (x == 0) {
+                        if (chunks.find(Vector2Key{ xx - 1, yy }) != chunks.end())
+                        {
+                            if (chunks[Vector2Key{ xx - 1, yy }].blocks[Chunk::CHUNK_SIZE - 1][y][z] == (int)blockType::air)
+                            {
+                                generateSide.push_back(blockPos::sideLeft);
+                            }
+                        }
+                        else
+                            generateSide.push_back(blockPos::sideLeft);
+                    }
+                    else if (chunks[chunkPos].blocks[x - 1][y][z] == (int)blockType::air)
+                        generateSide.push_back(blockPos::sideLeft);
+
+
+                    //TOP
+                    if (y == Chunk::MAX_HEIGHT - 1 || chunks[chunkPos].blocks[x][y + 1][z] == (int)blockType::air)
+                        generateSide.push_back(blockPos::top);
+
+                    //BOTTOM
+                    if (y != 0)
+                        if (chunks[chunkPos].blocks[x][y - 1][z] == (int)blockType::air)
+                            generateSide.push_back(blockPos::bottom);
+
+
+                    //BACK
+                    if (z == Chunk::CHUNK_SIZE - 1) {
+                        if (chunks.find(Vector2Key{ xx, yy + 1 }) != chunks.end())
+                        {
+                            if (chunks[Vector2Key{ xx, yy + 1 }].blocks[x][y][0]== (int)blockType::air)
+                            {
+                                generateSide.push_back(blockPos::back);
+                            }
+                        }
+                        else
+                            generateSide.push_back(blockPos::back);
+                    }
+                    else if (chunks[chunkPos].blocks[x][y][z + 1] == (int)blockType::air)
+                        generateSide.push_back(blockPos::back);
+
+
+                    //FRONT
+                    if (z == 0) {
+                        if (chunks.find(Vector2Key{ xx, yy - 1 }) != chunks.end())
+                        {
+                            if (chunks[Vector2Key{ xx, yy - 1 }].blocks[x][y][Chunk::CHUNK_SIZE - 1] == (int)blockType::air)
+                            {
+                                generateSide.push_back(blockPos::front);
+                            }
+                        }
+                        else
+                            generateSide.push_back(blockPos::front);
+                    }
+                    else if (chunks[chunkPos].blocks[x][y][z - 1] == (int)blockType::air)
+                        generateSide.push_back(blockPos::front);
+
+                    if(!generateSide.empty())
+                    {
+                        //Switch to batch rendering
+
+
+
+
+                        //The block gets made
+                        Block generateBlock(vec3(xx * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (x * BLOCK_SIZE), (y * BLOCK_SIZE), yy * (Chunk::CHUNK_SIZE * BLOCK_SIZE) + (z * BLOCK_SIZE)), blockType(chunks[chunkPos].blocks[x][y][z]), generateSide);
+                        generateSide.clear();
+
+                        //Build each individual block and assign it to blocks
+                        for(auto & blo : generateBlock.buildBlocks()){
+                            blocks[(int)blo.type].push_back(blo);
                         }
                     }
                 }
             }
         }
-        
-        
-        Texture textures[]
-        {
-            Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/wood_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/wood_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-            Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
-        };
-        int z = 0;
-        cout << "Starting Batch Rendering" << endl;
-        for(auto & j : blocks){ //Per vector
-            vector<Vertex> cubeVertex;
-            if(j.size())
-            for (auto & f : j) //Per block
-                for (auto & j : f.buildCube(defCoob.cube).getVertexSet(f.pos, f.sideExclusion))
-                    cubeVertex.push_back(j);
-            
-            
-            vector<GLuint> cubeInd;
-            for (int p = 0; p < cubeVertex.size(); p++){
-                cubeInd.push_back(p);
-            }
-            if(cubeInd.size() != 0){
-                vector<Texture> tex;
-                if(z == (int)blockType::wood)
-                    tex.push_back(textures[(int)blockType::wood]);
-                else
-                    tex.push_back(textures[(int)j[z].type]);
-                
-                
-                glm::vec3 cubePos = glm::vec3(i.second.position.x * 8 * 0.2, 0, i.second.position.y * 8 * 0.2);
-                glm::mat4 cubeModel = glm::mat4(1.0f);
-                cubeModel = glm::translate(cubeModel, cubePos);
-                
-                Mesh set(cubeVertex, cubeInd, tex);
-                sceneMeshes.push_back(set);
-                cout << "Pushing set for blocktype: " << z << endl;
-                j.clear();
-            }
-            z++;
-        }
-        cout << endl << endl;
     }
 
     /*lightShader.Activate();
@@ -330,4 +274,49 @@ void World::updateChunks()
 
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), sun.lightColor.x, sun.lightColor.y, sun.lightColor.z, sun.lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), sun.lightPos.x, sun.lightPos.y, sun.lightPos.z);*/
+}
+
+glm::vec2 World::playerPositionToChunkPosition(glm::vec3 &playerPos) {
+    float x = round((playerPos.x - Chunk::CHUNK_SIZE / 2) * .2);
+    float y = round((playerPos.z - Chunk::CHUNK_SIZE / 2) * .2);
+    return {x,y};
+}
+
+void World::renderBatch() {
+    vector<Texture> textures =
+    {
+        Texture("src/Textures/dirt.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/cobblestone.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/grass_block_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/grass_block_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/wood_side.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/wood_top.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("src/Textures/leaves.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+    };
+    cout << "Starting Batch Rendering" << endl;
+    Cube defCoob(blockType::grass, vec3(0));
+    for(int z = 0; z < blocks.size(); z++) {
+        vector<Vertex> cubeVertex;
+        if (!blocks[z].empty())
+            for (auto &f: blocks[z]) //Per block
+                for (auto &vert: f.buildCube(defCoob.cube).getVertexSet(f.pos, f.sideExclusion))
+                    cubeVertex.push_back(vert);
+
+        // make blocks outside and add current chunk to it
+        vector<GLuint> cubeInd;
+        cubeInd.reserve(cubeVertex.size());
+        for (int p = 0; p < cubeVertex.size(); p++) {
+            cubeInd.push_back(p);
+        }
+        if (!cubeInd.empty()) {
+            vector<Texture> tex;
+            tex.push_back(textures[z]);
+
+            Mesh set(cubeVertex, cubeInd, tex);
+            cout << "Pushing set for blocktype: " << z << endl;
+            sceneMeshes.push_back(set);
+            blocks[z].clear();
+        }
+    }
+    cout << endl << endl;
 }

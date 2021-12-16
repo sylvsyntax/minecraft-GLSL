@@ -8,7 +8,10 @@
 #ifndef WORLD_CLASS_H
 #define WORLD_CLASS_H
 
+#include <future>
+#include <thread>
 #include <unordered_map>
+#include "BlockEnums.h"
 #include "Mesh.h"
 #include "Chunk.h"
 #include "Cube.h"
@@ -47,13 +50,16 @@ public:
     double worldTime = 0;
     std::vector<Mesh> sceneMeshes;
     std::vector<Mesh> sceneLights;
+    std::vector<std::vector<Block>> blocks;
     std::unordered_map<Vector2Key, Chunk> chunks;
     Shader shaderProgram;
     Shader lightShader;
 
     void generateChunk(int x, int y);
-    void updateChunks();
+    void updateChunk(int x, int y);
     void updateSpecial();
+    void renderBatch();
+    static glm::vec2 playerPositionToChunkPosition(glm::vec3 &playerPos);
 };
 
 #endif /* WORLD_CLASS_H */
