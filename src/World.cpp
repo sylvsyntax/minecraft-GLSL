@@ -107,7 +107,7 @@ World::World() : shaderProgram("src/Shaders/default.vert","src/Shaders/default.f
 
     // CHUNK GEN BABY
     int t = 0;
-    int genSize = this->genSize;
+    int genSize = 4;
     for (int i = -genSize; i <= genSize; i++)
     {
         for (int j = -genSize; j <= genSize; j++)
@@ -181,7 +181,7 @@ void World::updateChunk(int xx, int yy)
                                 generateSide.push_back(blockPos::sideRight);
                             }
                         }
-                        else if (abs(xx) == genSize)
+                        else
                             generateSide.push_back(blockPos::sideRight);
                     }
                     else if (chunks[chunkPos].blocks[x + 1][y][z] == (int)blockType::air)
@@ -197,7 +197,7 @@ void World::updateChunk(int xx, int yy)
                                 generateSide.push_back(blockPos::sideLeft);
                             }
                         }
-                        else if (abs(xx) == genSize)
+                        else
                             generateSide.push_back(blockPos::sideLeft);
                     }
                     else if (chunks[chunkPos].blocks[x - 1][y][z] == (int)blockType::air)
@@ -218,12 +218,12 @@ void World::updateChunk(int xx, int yy)
                     if (z == Chunk::CHUNK_SIZE - 1) {
                         if (chunks.find(Vector2Key{ xx, yy + 1 }) != chunks.end())
                         {
-                            if (chunks[Vector2Key{ xx, yy + 1 }].blocks[x][y][0] == (int)blockType::air)
+                            if (chunks[Vector2Key{ xx, yy + 1 }].blocks[x][y][0]== (int)blockType::air)
                             {
                                 generateSide.push_back(blockPos::back);
                             }
                         }
-                        else if (abs(yy) == genSize)
+                        else
                             generateSide.push_back(blockPos::back);
                     }
                     else if (chunks[chunkPos].blocks[x][y][z + 1] == (int)blockType::air)
@@ -239,7 +239,7 @@ void World::updateChunk(int xx, int yy)
                                 generateSide.push_back(blockPos::front);
                             }
                         }
-                        else if (abs(yy) == genSize)
+                        else
                             generateSide.push_back(blockPos::front);
                     }
                     else if (chunks[chunkPos].blocks[x][y][z - 1] == (int)blockType::air)

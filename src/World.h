@@ -16,7 +16,6 @@
 #include "Chunk.h"
 #include "Cube.h"
 
-
 struct Vector2Key {
 
     int x;
@@ -46,7 +45,6 @@ struct std::hash<Vector2Key> {
 class World
 {
 public:
-    int genSize = 2;
     World();
     LightingCube sun;
     double worldTime = 0;

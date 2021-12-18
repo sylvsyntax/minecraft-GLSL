@@ -29,7 +29,7 @@ Chunk::Chunk(int x, int y) : position(glm::ivec2(x,y))
         {
             //float val = perlin(.1f * (x * CHUNK_SIZE + i), .1f * (y * CHUNK_SIZE + j));
             float val = perlinNoise.noise(((double)i / (double)goodNoiseValue + (double)x * CHUNK_SIZE / (double)goodNoiseValue), ((double)j / (double)goodNoiseValue + (double)y * CHUNK_SIZE / (double)goodNoiseValue), 0.5);
-            maxHeights.push_back(val * MAX_GRASS_HEIGHT/*CHANGE LEFT TO WHATEVER + MAX_HEIGHT / 4*//* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
+            maxHeights.push_back(val * MAX_HEIGHT/*CHANGE LEFT TO WHATEVER + MAX_HEIGHT / 4*//* * .1f * MAX_HEIGHT + MAX_HEIGHT / 2*/);
         }
     }
 
